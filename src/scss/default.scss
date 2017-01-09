@@ -1,0 +1,56 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.app1 {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  .title {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .wrap {
+    border: 1px solid #000;
+    width: 500px;
+    height: 50px;
+  }
+}
+
+form {
+  .form-row {
+    display: flex;
+    height: 19px;
+
+    div {
+      display: flex;
+
+      label {
+        display: inline-block;
+        overflow: hidden;
+        height: 19px;
+        white-space: nowrap;
+      }
+
+      label + * {
+        margin-left: 5px;
+      }
+    }
+
+    div + div {
+      margin-left: 5px;
+    }
+  }
+}
