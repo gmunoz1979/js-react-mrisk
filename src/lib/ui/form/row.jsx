@@ -8,7 +8,7 @@ class Row extends React.Component {
     let staticWidth = 0;
     let lenAuto     = 0;
 
-    this.props.children.forEach(child => {
+    React.Children.forEach(this.props.children, child => {
       if (child.props.width !== "auto") {
         staticWidth += parseInt(child.props.width);
       } else {
@@ -16,7 +16,7 @@ class Row extends React.Component {
       }
     });
 
-    const len   = this.props.children.length;
+    const len   = React.Children.count(this.props.children);
 
     const width = (this.props.width - staticWidth - (margin * (len - 1))) /
                   lenAuto;

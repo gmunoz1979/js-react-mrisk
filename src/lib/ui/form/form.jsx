@@ -19,9 +19,7 @@ class Form extends React.Component {
       <form autoComplete="off"
         ref={ form => {this.form = form;} }
         >
-        {React.cloneElement(this.props.children, {
-          width: this.state.width
-        })}
+        { React.Children.map(this.props.children, c => React.cloneElement(c, { width: this.state.width })) }
       </form>
     );
   }
