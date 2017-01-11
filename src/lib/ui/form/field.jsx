@@ -19,9 +19,11 @@ class Field extends React.Component {
            this.function_name + ".json";
   }
 
-  async getData() {
+  async getData(params) {
+    let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+
     try {
-      let response = await fetch(this.getUrl());
+      let response = await fetch(url);
       let json     = await response.json();
       this.updateValues && this.updateValues(json);
 

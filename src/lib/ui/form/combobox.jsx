@@ -18,6 +18,17 @@ class Combobox extends Field {
     this.setState({ options: values });
   }
 
+  componentDidMount() {
+    if (this.props.filterBy) {
+      let field = this._field.closest("form").querySelector(`*[name="${this.props.filterBy}"]`);
+
+      field.addEventListener("change", e => {
+        this._field.value = "";
+        this.getData({ id: [e.currentTarget.value] });
+      });
+    }
+  }
+
   render() {
     let width = this.props.width - this.props.titleWidth;
 
@@ -28,9 +39,9 @@ class Combobox extends Field {
           {this.props.title}
         </label>
         <select
+          ref      = {(field) => {this._field=field; }}
           style    = {{ width: width + "px" }}
-          name     = {this.props.name}
-          onChange = {this.props.handlerChange.bind(this)}>
+          name     = {this.props.name} >
           {this.state.options.map((o, i) => { return (
               <option key={i} value={o[this.props.idValue]}>{o[this.props.textValue]}</option>
             );
