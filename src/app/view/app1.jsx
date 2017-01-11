@@ -33,7 +33,7 @@ class App1 extends React.Component {
                 name       = "tipo"
                 width      = "auto"
                 namespace  = "Nivel1/Tipo"
-                idValue    = "fold_id"
+                idValue    = "tipo_id"
                 textValue  = "name"
               />
               <Combobox
@@ -42,8 +42,9 @@ class App1 extends React.Component {
                 name       = "subtipo"
                 width      = "200"
                 namespace  = "Nivel1/SubTipo"
-                idValue    = "fold_id"
+                idValue    = "subt_id"
                 textValue  = "name"
+                filterBy   = "tipo"
               />
             </Row>
             <Row>
