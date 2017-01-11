@@ -1,5 +1,6 @@
 import Config from "../lib/config";
 
-Config.Context = "Storage";
+Config.Url     = "http://local.halftau.com:9999"
+Config.Context = "Pruebas";
 
 export default Config;
