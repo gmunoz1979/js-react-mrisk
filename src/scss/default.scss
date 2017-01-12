@@ -28,15 +28,46 @@ body {
   }
 }
 
+.app2 {
+  position: absolute;
+  top: 300px;
+  left: 10px;
+
+  .title {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .wrap {
+    border: 1px solid #000;
+    width: 500px;
+  }
+}
+
+.app3 {
+  position: absolute;
+  top: 10px;
+  left: 520px;
+
+  .title {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .wrap {
+    border: 1px solid #000;
+    width: 500px;
+  }
+}
+
 .panel {
   border: 1px solid #000;
   padding: 10px;
-  background-color: rgba(0,0,0,.15);
+  background-color: rgba(170,170,170,.15);
 
   .panel-wrap {
     width: 100%;
     height: 100%;
-    border: 1px solid #000;
   }
 }
 
@@ -67,5 +98,29 @@ form {
     div + div {
       margin-left: 5px;
     }
+  }
+}
+
+table {
+  width: 100%;
+  height: 100%;
+
+  thead {
+    background-color: rgba(0,0,0,.25);
+    height: 30px;
+  }
+
+  td {
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding-left: 4px;
+  }
+
+  tr:first-child>td {
+    border-top: 1px solid #000;
+  }
+
+  td:first-child {
+    border-left: 1px solid #000;
   }
 }
