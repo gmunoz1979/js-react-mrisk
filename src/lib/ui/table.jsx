@@ -13,17 +13,23 @@ class Table extends React.Component {
     }
   }
 
-  getUrl() {
-    return Config.Url     + "/" +
-           Config.Context + "/" +
-           Config.Handler + "/" +
-           this.props.namespace + "/" +
-           "fetchAll.json";
+  get function_name() {
+    return this.props.filterBy || this.props.objectParent ? "fetchByParentId" : "fetchAll";
   }
 
-  async getData() {
+  getUrl() {
+    return Config.Url           + "/" +
+           Config.Context       + "/" +
+           Config.Handler       + "/" +
+           this.props.namespace + "/" +
+           this.function_name   + ".json";
+  }
+
+  async getData(params) {
+    let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+
     try {
-      let response = await fetch(this.getUrl());
+      let response = await fetch(url);
       let json     = await response.json();
 
       let data = json.map(json =>
@@ -76,9 +82,37 @@ class Table extends React.Component {
       );
     });
 
-    this.getData().then(json => {
-      this.setState({ rows: [].slice.call(json) })
-    });
+    if (!this.props.filterBy && !this.props.objectParent) {
+      this.getData().then(json => this.setState({ rows: [].slice.call(json) }));
+    } else {
+      let app = this.table.closest(".container");
+
+      if (this.props.filterBy) {
+        let target = app.querySelector(`*[name=${this.props.filterBy}]`);
+        target.addEventListener("change", e =>
+          {
+            let target = e.currentTarget;
+            this.getData({ id: [target.value] }).then(json => this.setState({ rows: [].slice.call(json) }));
+            this.onrowclick(null, -1, null);
+          }
+        );
+      }
+
+      if (this.props.objectParent) {
+        let object = app.querySelector(`*[name=${this.props.objectParent}]`);
+        object.addEventListener("select", e =>
+          {
+            if (!e.detail.row || e.detail.index === -1) {
+              this.setState({ rows: [] });
+              return;
+            }
+
+            let value = e.detail.row[e.detail.id];
+            this.getData({ id: [value] }).then(json => this.setState({ rows: [].slice.call(json) }));
+          }
+        );
+      }
+    }
 
     this.setState({
       head: head,
@@ -86,9 +120,24 @@ class Table extends React.Component {
     });
   }
 
+  onrowclick(row, index, e) {
+    let event = new CustomEvent("select",
+      {
+        detail: {
+          id:    this.props.idKey,
+          row:   row,
+          index: index,
+          event: e
+        }
+      }
+    );
+
+    this.table.dispatchEvent(event);
+  }
+
   render() {
     return (
-      <table ref={(table) => { this.table = table }} cellSpacing="0" cellPadding="0">
+      <table name={this.props.name} ref={(table) => { this.table = table }} cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
             { this.state.head }
@@ -98,7 +147,7 @@ class Table extends React.Component {
           {
             this.state.rows.map((r, i)=> {
               return (
-                <tr key={i}>
+                <tr key={i} onClick={this.onrowclick.bind(this, r, i)}>
                   {
                     React.Children.map(this.state.children, child =>
                       React.cloneElement(child,
