@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "dev":   "NODE_ENV=development webpack-dev-server --hot --progress --colors -d --inline",
+    "dev":   "NODE_ENV=development webpack-dev-server --port 8000 --hot --progress --colors -d --inline",
     "build": "NODE_ENV=production  webpack --progress --colors"
   },
   "keywords": [],
