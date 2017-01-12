@@ -38,7 +38,7 @@ class App1 extends React.Component {
           <Combobox
             title      = "Sub tipo"
             titleWidth = "80"
-            name       = "subtipo"
+            name       = "sub_tipo"
             width      = "200"
             namespace  = "Nivel1/SubTipo"
             idValue    = "subt_id"
