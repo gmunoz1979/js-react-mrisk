@@ -1,0 +1,29 @@
+form {
+  .form-row+.form-row {
+    margin-top: 10px;
+  }
+
+  .form-row {
+    display: flex;
+    min-height: 19px;
+
+    div {
+      display: flex;
+
+      label {
+        display: inline-block;
+        overflow: hidden;
+        height: 19px;
+        white-space: nowrap;
+      }
+
+      label + * {
+        margin-left: 5px;
+      }
+    }
+
+    div + div {
+      margin-left: 5px;
+    }
+  }
+}
