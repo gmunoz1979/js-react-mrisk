@@ -25,6 +25,19 @@ class Table extends React.Component {
            this.function_name   + ".json";
   }
 
+  hasValue(o) {
+    return o !== undefined && o !== null;
+  }
+
+  isDate(o) {
+    return this.hasValue(o.year)       &&
+           this.hasValue(o.month)      &&
+           this.hasValue(o.dayOfMonth) &&
+           this.hasValue(o.hourOfDay)  &&
+           this.hasValue(o.minute)     &&
+           this.hasValue(o.second);
+  }
+
   async getData(params) {
     let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
 
@@ -37,7 +50,7 @@ class Table extends React.Component {
           let o = {}
 
           for (let key in json) {
-            if (typeof(json[key]) === "object") {
+            if (typeof(json[key]) === "object" && !this.isDate(json[key])) {
               for (let k in json[key]) {
                 o[key + "." + k] = json[key][k];
               }
