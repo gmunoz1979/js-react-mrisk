@@ -24,4 +24,18 @@ table {
   td:first-child {
     border-left: 1px solid #000;
   }
+
+  td.column-true i::before {
+    content: "si";
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+  }
+
+  td.column-false i::before {
+    content: "no";
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+  }
 }

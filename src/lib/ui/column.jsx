@@ -23,6 +23,13 @@ class Column extends React.Component {
       value = this.getDate(value).format(this.props.format);
     }
 
+    if (this.props.type === "bool") {
+      let bool = ""+value;
+      return (
+        <td className={`column-${bool}`}><i></i></td>
+      );
+    }
+
     return (
       <td>{value}</td>
     );
