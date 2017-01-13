@@ -70,6 +70,8 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
+    this.table.component = this;
+
     let width = this.table.clientWidth;
     let auto  = 0;
 
@@ -146,6 +148,10 @@ class Table extends React.Component {
     );
 
     this.table.dispatchEvent(event);
+  }
+
+  removeRows() {
+    this.setState({ rows: [] });
   }
 
   render() {
