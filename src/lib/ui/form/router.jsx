@@ -1,5 +1,8 @@
-import Field  from "./field";
-import Config from "../../config";
+import React    from "react";
+import ReactDOM from "react-dom";
+import Field    from "./field";
+import Message  from "../message";
+import Config   from "../../config";
 
 class Router extends Field {
 
@@ -24,8 +27,26 @@ class Router extends Field {
 
     try {
       let response = await fetch(url);
-      let json     = await response.json();
-      return json;
+      if (response.ok) {
+        let json = await response.json();
+        return json;
+      } else {
+        if (this.props.showMessageError) {
+          let panel = this.field.closest(".panel");
+          let container = document.createElement("div");
+          container.classList.add("container-message");
+          container.style.width  = panel.clientWidth  + "px";
+          container.style.height = panel.clientHeight + "px";
+
+          panel.appendChild(container);
+
+          ReactDOM.render(
+            <Message>No se encontro dato</Message>,
+              container);
+        } else {
+          console.warn(response);
+        }
+      }
     } catch(err) {
       console.error(err);
     }
