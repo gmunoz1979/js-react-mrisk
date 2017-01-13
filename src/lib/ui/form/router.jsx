@@ -46,10 +46,10 @@ class Router extends Field {
         } else {
           console.warn(response);
         }
+
+        throw new Error();
       }
-    } catch(err) {
-      console.error(err);
-    }
+    } catch(err) { throw err; }
   }
 }
 
