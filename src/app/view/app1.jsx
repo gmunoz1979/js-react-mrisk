@@ -32,11 +32,12 @@ class App1 extends React.Component {
             width      = "250"
           />
         <ButtonSearch
-            text         = "Buscar"
-            width        = "auto"
-            namespace    = "Nivel1"
-            fieldSearch  = "id"
-            action       = { action }
+            text             = "Buscar"
+            width            = "auto"
+            namespace        = "Nivel1"
+            fieldSearch      = "id"
+            showMessageError = "true"
+            action           = { action }
         />
         </Row>
       </Form>
