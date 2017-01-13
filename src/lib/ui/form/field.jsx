@@ -9,7 +9,7 @@ class Field extends React.Component {
   render(children) {
     const width      = this.props.width + "px";
     const titleWidth = this.props.titleWidth + "px";
-
+    
     return (
       <div style = {{ width: width }}>
         <label style = {{ width: titleWidth }}>

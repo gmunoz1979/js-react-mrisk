@@ -68,7 +68,7 @@ class Form extends Router {
     this.json = json;
     this.form.value = this.idValue;
 
-    let event = new CustomEvent("change",
+    let event = new CustomEvent("update",
       {
         detail: {}
       }

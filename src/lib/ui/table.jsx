@@ -89,7 +89,7 @@ class Table extends React.Component {
 
       if (this.props.filterBy) {
         let target = app.querySelector(`*[name=${this.props.filterBy}]`);
-        target.addEventListener("change", e =>
+        target.addEventListener("update", e =>
           {
             let target = e.target;
             this.getData({ id: [target.value] }).then(json => this.setState({ rows: [].slice.call(json) }));
