@@ -49,7 +49,6 @@ class Form extends Router {
   }
 
   setData(json={}) {
-    this.json = json;
 
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
@@ -65,6 +64,17 @@ class Form extends Router {
         field.value = json[k];
       }
     }
+
+    this.json = json;
+    this.form.value = this.idValue;
+
+    let event = new CustomEvent("change",
+      {
+        detail: {}
+      }
+    );
+
+    this.form.dispatchEvent(event);
   }
 
   componentDidMount() {

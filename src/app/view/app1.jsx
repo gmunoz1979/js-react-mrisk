@@ -15,18 +15,9 @@ class App1 extends React.Component {
   render() {
 
     let action = function(data) {
-      let event = new CustomEvent("change",
-        {
-          detail: {}
-        }
-      );
-
-
       let container = this.field.closest(".container");
       let form      = container.querySelector("*[name=form1]");
       form.component.setData(data);
-      form.value = form.component.idValue;
-      form.dispatchEvent(event);
     }
 
     let search = (
