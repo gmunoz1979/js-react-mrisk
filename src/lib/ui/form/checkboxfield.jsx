@@ -1,22 +1,22 @@
 import React from "react";
+import Field from "./field";
 
-class CheckboxField extends React.Component {
+class CheckboxField extends Field {
 
   render() {
-    return (
-      <div style = {{ width: this.props.width + "px" }}>
-        <label
-          style = {{ width: this.props.titleWidth + "px" }}>
-          {this.props.title}
-        </label>
+    let field = (
+      <div>
         <input
-          type  = "checkbox"
-          name  = {this.props.name} />
+          type = "checkbox"
+          name = { this.props.name }
+          ref  = { field => this.field = field } />
         <label>
           {this.props.text}
         </label>
       </div>
     );
+
+    return super.render(field);
   }
 }
 

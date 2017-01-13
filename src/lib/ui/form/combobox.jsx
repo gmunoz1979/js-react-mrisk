@@ -1,7 +1,7 @@
-import React from "react";
-import Field from "./field";
+import React  from "react";
+import Router from "./router";
 
-class Combobox extends Field {
+class Combobox extends Router {
 
   constructor(props) {
     super(props);
@@ -18,42 +18,46 @@ class Combobox extends Field {
     this.setState({ options: values });
   }
 
-  componentDidMount() {
-    if (this.props.filterBy) {
-      let field = this._field.closest("form").querySelector(`*[name="${this.props.filterBy}"]`);
+  async getData(params) {
+    let json = await super.getData(params);
+    this.updateValues(json);
+  }
 
-      field.addEventListener("change", e => {
-        this._field.value = "";
-        this.getData({ id: [e.currentTarget.value] });
-      });
+  componentDidMount() {
+    super.componentDidMount();
+
+    if (!this.props.filterBy) {
+      return;
     }
+
+    let field = this.field.closest("form").querySelector(`*[name="${this.props.filterBy}"]`);
+
+    field.addEventListener("change", e => {
+      this.field.value = "";
+      this.getData({ id: [e.currentTarget.value] });
+    });
   }
 
   render() {
-    let width = this.props.width - this.props.titleWidth;
+    const style = {width: (this.props.width - this.props.titleWidth) + "px"};
 
-    return (
-      <div style = {{ width: this.props.width + "px" }}>
-        <label
-          style = {{ width: this.props.titleWidth + "px" }}>
-          {this.props.title}
-        </label>
-        <select
-          ref      = {(field) => {this._field=field; }}
-          style    = {{ width: width + "px" }}
-          name     = {this.props.name} >
-          {this.state.options.map((o, i) => { return (
-              <option key={i} value={o[this.props.idValue]}>{o[this.props.textValue]}</option>
-            );
-          })}
-        </select>
-      </div>
+    let field = (
+      <select
+        style = { style }
+        name  = { this.props.name }
+        ref   = { field => this.field = field }
+      >
+        {this.state.options.map((o, i) => { return (
+            <option key={i} value={ o[this.props.idValue]}>
+              { o[this.props.textValue] }
+            </option>
+          );
+        })}
+      </select>
     );
-  }
-}
 
-Combobox.defaultProps = {
-  handlerChange: function() {}
+    return super.render(field);
+  }
 }
 
 export default Combobox;

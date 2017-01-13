@@ -1,21 +1,22 @@
 import React from "react";
+import Field from "./field";
 
-class TextAreaField extends React.Component {
+class TextAreaField extends Field {
 
   render() {
-    let width = this.props.width - this.props.titleWidth;
+    const style = {
+      width:  (this.props.width - this.props.titleWidth) + "px",
+      height: this.props.height + "px", resize: "none"
+    }
 
-    return (
-      <div style = {{ width: this.props.width + "px", height: this.props.height + "px" }}>
-        <label
-          style = {{ width: this.props.titleWidth + "px" }}>
-          {this.props.title}
-        </label>
-        <textarea
-          style = {{ width: width + "px", height: this.props.height + "px", resize: "none" }}
-          name  = {this.props.name}></textarea>
-      </div>
+    let field = (
+      <textarea
+        style = { style }
+        name  = { this.props.name }
+        ref   = { field => this.field = field }></textarea>
     );
+
+    return super.render(field);
   }
 }
 
