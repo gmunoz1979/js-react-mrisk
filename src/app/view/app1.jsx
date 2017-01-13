@@ -6,14 +6,54 @@ import Combobox      from "../../lib/ui/form/combobox";
 import TextField     from "../../lib/ui/form/textfield";
 import TextAreaField from "../../lib/ui/form/textareafield";
 import CheckboxField from "../../lib/ui/form/checkboxfield";
+import ButtonSearch  from "../../lib/ui/form/buttonsearch";
 import Table         from "../../lib/ui/table";
 import Column        from "../../lib/ui/column";
 
 class App1 extends React.Component {
 
   render() {
+
+    let action = function(data) {
+      let event = new CustomEvent("change",
+        {
+          detail: {}
+        }
+      );
+
+
+      let container = this.field.closest(".container");
+      let form      = container.querySelector("*[name=form1]");
+      form.component.setData(data);
+      form.value = form.component.idValue;
+      form.dispatchEvent(event);
+    }
+
+    let search = (
+      <Form
+        name="search"
+      >
+        <Row>
+          <TextField
+            title      = "Id"
+            titleWidth = "80"
+            name       = "id"
+            width      = "250"
+          />
+        <ButtonSearch
+            text         = "Buscar"
+            width        = "auto"
+            namespace    = "Nivel1"
+            fieldSearch  = "id"
+            action       = { action }
+        />
+        </Row>
+      </Form>
+    );
+
     let form = (
       <Form
+        name      = "form1"
         namespace = "Nivel1"
         fieldKey  = "niv1_id"
         >
@@ -78,7 +118,7 @@ class App1 extends React.Component {
       <Table
         name      = "table1"
         namespace = "Nivel2"
-        filterBy  = "niv1_id"
+        filterBy  = "form1"
         idKey     = "niv2_id"
       >
         <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
@@ -106,6 +146,11 @@ class App1 extends React.Component {
       <div className="app container">
         <div className="app1">
           <span className="title">Ejemplo 1</span>
+          <Panel
+            width  = "500"
+            height = "40">
+            {search}
+          </Panel>
           <Panel
             width  = "500"
             height = "250">
