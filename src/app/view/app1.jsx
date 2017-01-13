@@ -17,7 +17,14 @@ class App1 extends React.Component {
     let action = function(data) {
       let container = this.field.closest(".container");
       let form      = container.querySelector("*[name=form1]");
+      let table     = container.querySelector("*[name=table1]");
       form.component.setData(data);
+    }
+
+    let actionError = function() {
+      let container = this.field.closest(".container");
+      let table     = container.querySelector("*[name=table1]");
+      table.component.removeRows();
     }
 
     let search = (
@@ -38,6 +45,7 @@ class App1 extends React.Component {
             fieldSearch      = "id"
             showMessageError = "true"
             action           = { action }
+            actionError      = { actionError }
         />
         </Row>
       </Form>
