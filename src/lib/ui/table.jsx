@@ -91,7 +91,7 @@ class Table extends React.Component {
         let target = app.querySelector(`*[name=${this.props.filterBy}]`);
         target.addEventListener("change", e =>
           {
-            let target = e.currentTarget;
+            let target = e.target;
             this.getData({ id: [target.value] }).then(json => this.setState({ rows: [].slice.call(json) }));
             this.onrowclick(null, -1, null);
           }
