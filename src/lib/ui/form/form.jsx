@@ -44,7 +44,13 @@ class Form extends Router {
     field.value = value;
   }
 
+  get idValue() {
+    return !this.json ? null : this.json[this.props.fieldKey];
+  }
+
   setData(json={}) {
+    this.json = json;
+
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
         if (field.nodeName === "SELECT") {
@@ -62,6 +68,8 @@ class Form extends Router {
   }
 
   componentDidMount() {
+    this.form.component = this;
+
     this.setState({ width: this.form.clientWidth });
 
     if (!this.props.fieldKey) {
@@ -77,7 +85,8 @@ class Form extends Router {
 
     return (
       <form autoComplete="off"
-        ref={ form => {this.form = form;} }
+        name = { this.props.name }
+        ref  = { form => {this.form = form;} }
       >
         { React.Children.map(this.props.children, c => React.cloneElement(c, { width: width })) }
       </form>
