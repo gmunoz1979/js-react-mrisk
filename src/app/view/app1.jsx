@@ -115,7 +115,7 @@ class App1 extends React.Component {
         <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
         <Column name = "name"      title = "Nombre"       width = "auto"></Column>
         <Column name = "ok"        title = "OK"           width = "50"></Column>
-        <Column name = "last_date" title = "Ultima Fecha" width = "auto"></Column>
+        <Column name = "last_date" title = "Ultima Fecha" width = "auto" type="date" format="MM/DD/YYYY"></Column>
         <Column name = "other"     title = "Otro"         width = "auto"></Column>
       </Table>
     );
