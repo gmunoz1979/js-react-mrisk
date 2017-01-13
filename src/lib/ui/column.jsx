@@ -21,7 +21,6 @@ class Column extends React.Component {
     if (typeof(value) === "object" && this.props.type === "date") {
       const v = Object.assign({}, value);
       value = this.getDate(value).format(this.props.format);
-      console.debug(value, v);
     }
 
     return (
