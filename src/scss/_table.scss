@@ -25,14 +25,14 @@ table {
     border-left: 1px solid #000;
   }
 
-  td.column-true i::before {
+  td.column-true span::before {
     content: "si";
     text-transform: uppercase;
     display: block;
     text-align: center;
   }
 
-  td.column-false i::before {
+  td.column-false span::before {
     content: "no";
     text-transform: uppercase;
     display: block;

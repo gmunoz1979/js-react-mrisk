@@ -26,7 +26,7 @@ class Column extends React.Component {
     if (this.props.type === "bool") {
       let bool = ""+value;
       return (
-        <td className={`column-${bool}`}><i></i></td>
+        <td className={`column-${bool}`}><span></span></td>
       );
     }
 
