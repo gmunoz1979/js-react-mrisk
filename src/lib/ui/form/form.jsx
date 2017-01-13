@@ -1,7 +1,7 @@
 import React  from "react";
-import Config from "../../config";
+import Router from "./router";
 
-class Form extends React.Component {
+class Form extends Router {
 
   constructor(props) {
     super(props);
@@ -11,69 +11,82 @@ class Form extends React.Component {
     }
   }
 
-  getUrl() {
-    return Config.Url     + "/" +
-           Config.Context + "/" +
-           Config.Handler + "/" +
-           this.props.namespace + "/" +
-           "fetchById.json";
+  get function_name() {
+    return "fetchById";
   }
 
-  async getData(params) {
-    let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+  getFields(json) {
+    let fields = {};
 
-    try {
-      let response = await fetch(url);
-      let json     = await response.json();
-      let fields   = {};
+    for (let [k, v] of Object.entries(json)) {
+      fields[k] = this.form.querySelector(`*[name=${k}]`);
+    }
 
-      for (let [k, v] of Object.entries(json)) {
-        fields[k] = this.form.querySelector(`*[name=${k}]`);
+    return fields;
+  }
+
+  async updateCombobox(k, json, field) {
+    let c     = field.component;
+    let value = json[k][c.props.idValue];
+    field.value = value;
+
+    if (!c.props.filterBy) {
+      return;
+    }
+
+
+    let cbx = this.form.querySelector(`*[name=${c.props.filterBy}]`);
+    let cbx_obj   = json[k][cbx.component.props.name];
+    let cbx_value = cbx_obj[cbx.component.props.idValue];
+    cbx.value = cbx_value;
+
+    await c.getData({ id: [cbx_value] });
+    field.value = value;
+  }
+
+  setData(json={}) {
+    for (let [k, field] of Object.entries(this.getFields(json))) {
+      if (field) {
+        if (field.nodeName === "SELECT") {
+          this.updateCombobox(k, json, field);
+          continue;
+        }
+        if (field.type === "checkbox") {
+          field.checked = json[k];
+          continue;
+        }
+
+        field.value = json[k];
       }
-
-      return [json, fields];
-    } catch(err) {
-      console.error(err);
     }
   }
 
   componentDidMount() {
     this.setState({ width: this.form.clientWidth });
 
-    if (this.props.fieldKey) {
-      let field = this.form.querySelector(`*[name=${this.props.fieldKey}]`);
-      field.addEventListener("change", e =>
-        {
-          let target = e.currentTarget;
-          this.getData({ id: [target.value] }).then(data =>
-            {
-              let [json, fields] = data;
-
-              for (let [k, field] of Object.entries(fields)) {
-                if (field) {
-                  if (field.type === "checkbox") {
-                    field.checked = json[k];
-                    return;
-                  }
-                  field.value = json[k];
-                }
-              }
-            }
-          );
-        }
-      );
+    if (!this.props.fieldKey) {
+      return;
     }
+
+    let field = this.form.querySelector(`*[name=${this.props.fieldKey}]`);
+    field.addEventListener("change", e => this.getData({ id: [ e.currentTarget.value] }).then(json => this.setData(json)));
   }
 
   render() {
+    const width = this.state.width;
+
     return (
       <form autoComplete="off"
         ref={ form => {this.form = form;} }
-        >
-        { React.Children.map(this.props.children, c => React.cloneElement(c, { width: this.state.width })) }
+      >
+        { React.Children.map(this.props.children, c => React.cloneElement(c, { width: width })) }
       </form>
     );
   }
 }
+
+Form.defaultProps = {
+  autoRouter: false
+};
 
 export default Form;
