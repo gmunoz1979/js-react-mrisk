@@ -24,10 +24,23 @@ class Router extends Field {
   }
 
   async getData(params) {
-    let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+    let url  = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+    let auth = localStorage.getItem("access_token");
+
+    let headers = new Headers();
+    if (auth) {
+      headers.append("Accept", "application/json");
+      headers.append("Authentication", "Bearer " + auth);
+    }
+
+    let config = {
+      method: "GET",
+      headers: headers
+    }
+
 
     try {
-      let response = await fetch(url);
+      let response = await fetch(url, config);
       if (response.ok) {
         let json = await response.json();
         return json;
