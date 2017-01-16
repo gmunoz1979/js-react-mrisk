@@ -5,6 +5,28 @@
     <title>Javascript new framework mRisk - 2017</title>
   </head>
   <body>
-    Redirect!!!
-  </body>
+    <script type="text/javascript">
+      (function() {
+        let code = /\?code=([\w\-]+)/.exec(document.location.search);
+
+        if (!code) {
+          return;
+        }
+
+        const redirect = document.location.origin;
+        const client_id = 540289891877889;
+
+        let url = `https://local.halftau.com/Pruebas/Auth/token?code=${code[1]}&redirect_uri=${redirect}/redirect.html`;
+
+        fetch(url)
+        .then(response => response.json())
+        .then(json => {
+          localStorage.setItem("access_token", json.access_token);
+          localStorage.setItem("token_type",   json.token_type);
+          localStorage.setItem("expires_in",   json.expires_in);
+
+          document.location.href = redirect;
+        })
+      })();
+    </script>
 </html>
