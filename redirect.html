@@ -13,10 +13,10 @@
           return;
         }
 
-        const redirect = document.location.origin;
-        const client_id = 540289891877889;
 
-        let url = `https://local.halftau.com/Pruebas/Auth/token?code=${code[1]}&redirect_uri=${redirect}/redirect.html`;
+        const redirect = document.location.href.replace(document.location.search, "");
+        const client_id = 540289891877889;
+        let url = `https://local.halftau.com/Pruebas/Auth/token?code=${code[1]}&redirect_uri=${redirect}`;
 
         fetch(url)
         .then(response => response.json())
@@ -25,7 +25,7 @@
           localStorage.setItem("token_type",   json.token_type);
           localStorage.setItem("expires_in",   json.expires_in);
 
-          document.location.href = redirect;
+          document.location.href = redirect.replace("/redirect.html", "");
         })
       })();
     </script>
