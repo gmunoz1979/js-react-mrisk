@@ -47,7 +47,7 @@ class Router extends Field {
         } else {
           if (response.status === 401) {
             let redirect = function() {
-              window.location.href = document.location.href + "redirect.html"
+              window.location.href = "https://local.halftau.com/Login/Site/form?response_type=code&client_id=540289891877889&redirect_uri=https://local.halftau.com/Storage/Site/doLogin&scope=Login&login_hint=&state=";
             }
 
             let c = document.createElement("div");
