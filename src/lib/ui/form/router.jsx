@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Field    from "./field";
 import Message  from "../message";
 import Config   from "../../config";
+import Alert    from "../alert";
 
 class Router extends Field {
 
@@ -44,6 +45,26 @@ class Router extends Field {
             <Message>No se encontro dato</Message>,
               container);
         } else {
+          if (response.status === 401) {
+            let redirect = function() {
+              window.location.href = document.location.href + "redirect.html"
+            }
+
+            let c = document.createElement("div");
+            c.classList.add("window-modal");
+            c.style.width  = document.body.clientWidth  + "px";
+            c.style.height = document.body.clientHeight + "px";
+            document.body.appendChild(c);
+            ReactDOM.render(
+              <Alert
+                width   = "250"
+                height  = "100"
+                handlerChild = {redirect}
+                >
+                Error 401 - Sin autorización
+              </Alert>, c
+            );
+          }
           console.warn(response);
         }
 
