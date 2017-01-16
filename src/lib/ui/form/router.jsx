@@ -30,14 +30,12 @@ class Router extends Field {
     let headers = new Headers();
     if (auth) {
       headers.append("Accept", "application/json");
-      headers.append("Authentication", "Bearer " + auth);
+      headers.append("Authorization", "Bearer " + auth);
     }
-
     let config = {
       method: "GET",
       headers: headers
     }
-
 
     try {
       let response = await fetch(url, config);
