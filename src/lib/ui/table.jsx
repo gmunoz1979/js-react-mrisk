@@ -40,9 +40,20 @@ class Table extends React.Component {
 
   async getData(params) {
     let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+    let auth = localStorage.getItem("access_token");
+
+    let headers = new Headers();
+    if (auth) {
+      headers.append("Accept", "application/json");
+      headers.append("Authorization", "Bearer " + auth);
+    }
+    let config = {
+      method: "GET",
+      headers: headers
+    }
 
     try {
-      let response = await fetch(url);
+      let response = await fetch(url, config);
       let json     = await response.json();
 
       let data = json.map(json =>
