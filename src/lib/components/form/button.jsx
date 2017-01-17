@@ -1,25 +1,6 @@
 import React  from "react";
-import Router from "./router";
 
-class Button extends Router {
-
-  get function_name() {
-    return "fetchById";
-  }
-
-  render() {
-    const style = { width: (this.props.width - this.props.titleWidth) + "px" };
-
-    let field = (
-      <input
-        style = { style }
-        type  = "text"
-        name  = { this.props.name }
-        ref   = { field => this.field = field } />
-    );
-
-    return super.render(field);
-  }
+class Button extends React.Component {
 
   render() {
     const style = { width: this.props.width + "px" };
@@ -31,11 +12,16 @@ class Button extends Router {
           type    = "button"
           ref     = { field => this.field = field }
           value   = { this.props.text }
-          onClick = { this.handlerClick.bind(this) }
+          onClick = { this.props.handlerClick.bind(this) }
         />
+      {this.props.children}
       </div>
     );
   }
+}
+
+Button.defaultProps = {
+  handlerClick: function() {}
 }
 
 export default Button;

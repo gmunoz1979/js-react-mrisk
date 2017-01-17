@@ -1,7 +1,6 @@
-import React  from "react";
-import Router from "./router";
+import React from "react";
 
-class Form extends Router {
+class Form extends React.Component {
 
   constructor(props) {
     super(props);
@@ -11,14 +10,14 @@ class Form extends Router {
     }
   }
 
-  get function_name() {
-    return "fetchById";
-  }
-
   getFields(json) {
     let fields = {};
 
     for (let [k, v] of Object.entries(json)) {
+      if (/\./g.exec(k)) {
+        continue;
+      }
+
       fields[k] = this.form.querySelector(`*[name=${k}]`);
     }
 
@@ -49,7 +48,6 @@ class Form extends Router {
   }
 
   setData(json={}) {
-
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
         if (field.nodeName === "SELECT") {
@@ -103,9 +101,5 @@ class Form extends Router {
     );
   }
 }
-
-Form.defaultProps = {
-  autoRouter: false
-};
 
 export default Form;

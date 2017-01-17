@@ -1,11 +1,11 @@
-import React  from "react";
-import Router from "./router";
+import React from "react";
+import Field from "./field";
 
-class Combobox extends Router {
+class Combobox extends Field {
 
   constructor(props) {
     super(props);
-    this.state = { options: [] };
+    this.state = { json: [] };
   }
 
   updateValues(values) {
@@ -15,12 +15,7 @@ class Combobox extends Router {
 
     values.unshift(value);
 
-    this.setState({ options: values });
-  }
-
-  async getData(params) {
-    let json = await super.getData(params);
-    this.updateValues(json);
+    return values;
   }
 
   componentDidMount() {
@@ -32,10 +27,10 @@ class Combobox extends Router {
 
     let field = this.field.closest("form").querySelector(`*[name="${this.props.filterBy}"]`);
 
-    field.addEventListener("change", e => {
-      this.field.value = "";
-      this.getData({ id: [e.currentTarget.value] });
-    });
+    // field.addEventListener("change", e => {
+    //   this.field.value = "";
+    //   this.getData({ id: [e.currentTarget.value] });
+    // });
   }
 
   render() {
@@ -47,7 +42,7 @@ class Combobox extends Router {
         name  = { this.props.name }
         ref   = { field => this.field = field }
       >
-        {this.state.options.map((o, i) => { return (
+        {this.updateValues(this.props.json).map((o, i) => { return (
             <option key={i} value={ o[this.props.idValue]}>
               { o[this.props.textValue] }
             </option>
@@ -59,5 +54,9 @@ class Combobox extends Router {
     return super.render(field);
   }
 }
+
+Combobox.defaultProps = {
+  json: []
+};
 
 export default Combobox;

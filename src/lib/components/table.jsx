@@ -8,142 +8,8 @@ class Table extends React.Component {
 
     this.state = {
       head:  [],
-      rows:  [],
       child: []
     }
-  }
-
-  get function_name() {
-    return this.props.filterBy || this.props.objectParent ? "fetchByParentId" : "fetchAll";
-  }
-
-  getUrl() {
-    return Config.Url           + "/" +
-           Config.Context       + "/" +
-           Config.Handler       + "/" +
-           this.props.namespace + "/" +
-           this.function_name   + ".json";
-  }
-
-  hasValue(o) {
-    return o !== undefined && o !== null;
-  }
-
-  isDate(o) {
-    return this.hasValue(o.year)       &&
-           this.hasValue(o.month)      &&
-           this.hasValue(o.dayOfMonth) &&
-           this.hasValue(o.hourOfDay)  &&
-           this.hasValue(o.minute)     &&
-           this.hasValue(o.second);
-  }
-
-  async getData(params) {
-    let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
-    let auth = localStorage.getItem("access_token");
-
-    let headers = new Headers();
-    if (auth) {
-      headers.append("Accept", "application/json");
-      headers.append("Authorization", "Bearer " + auth);
-    }
-    let config = {
-      method: "GET",
-      headers: headers
-    }
-
-    try {
-      let response = await fetch(url, config);
-      let json     = await response.json();
-
-      let data = json.map(json =>
-        {
-          let o = {}
-
-          for (let key in json) {
-            if (typeof(json[key]) === "object" && !this.isDate(json[key])) {
-              for (let k in json[key]) {
-                o[key + "." + k] = json[key][k];
-              }
-            } else {
-              o[key] = json[key];
-            }
-          }
-
-          return o;
-        }
-      );
-
-      return data;
-    } catch(err) {
-      console.error(err);
-    }
-  }
-
-  componentDidMount() {
-    this.table.component = this;
-
-    let width = this.table.clientWidth;
-    let auto  = 0;
-
-    React.Children.forEach(this.props.children, child => {
-      if (child.props.width === "auto") {
-        auto++;
-      } else {
-        width -= parseInt(child.props.width);
-      }
-    });
-
-    const width_auto = width/auto;
-
-    let children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        width: child.props.width === "auto" ? width_auto : child.props.width
-      })
-    );
-
-    let head = React.Children.map(children, child => {
-      return (
-        <td style={{ width: child.props.width + "px" }}>{child.props.title}</td>
-      );
-    });
-
-    if (!this.props.filterBy && !this.props.objectParent) {
-      this.getData().then(json => this.setState({ rows: [].slice.call(json) }));
-    } else {
-      let app = this.table.closest(".container");
-
-      if (this.props.filterBy) {
-        let target = app.querySelector(`*[name=${this.props.filterBy}]`);
-        target.addEventListener("update", e =>
-          {
-            let target = e.target;
-            this.getData({ id: [target.value] }).then(json => this.setState({ rows: [].slice.call(json) }));
-            this.onrowclick(null, -1, null);
-          }
-        );
-      }
-
-      if (this.props.objectParent) {
-        let object = app.querySelector(`*[name=${this.props.objectParent}]`);
-        object.addEventListener("select", e =>
-          {
-            if (!e.detail.row || e.detail.index === -1) {
-              this.setState({ rows: [] });
-              return;
-            }
-
-            let value = e.detail.row[e.detail.id];
-            this.getData({ id: [value] }).then(json => this.setState({ rows: [].slice.call(json) }));
-          }
-        );
-      }
-    }
-
-    this.setState({
-      head: head,
-      children: children
-    });
   }
 
   onrowclick(row, index, e) {
@@ -161,8 +27,38 @@ class Table extends React.Component {
     this.table.dispatchEvent(event);
   }
 
-  removeRows() {
-    this.setState({ rows: [] });
+  calcAutoWidth() {
+    let width = this.table.clientWidth;
+    let auto  = 0;
+
+    React.Children.forEach(this.props.children, child => {
+      if (child.props.width === "auto") {
+        auto++;
+      } else {
+        width -= parseInt(child.props.width);
+      }
+    });
+
+    return width/auto;
+  }
+
+  componentDidMount() {
+    this.table.component = this;
+    const auto_width = this.calcAutoWidth();
+
+    let children = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
+        width: child.props.width === "auto" ? auto_width : child.props.width
+      })
+    );
+
+    let head = React.Children.map(children, child => {
+      return (
+        <td style={{ width: child.props.width + "px" }}>{child.props.title}</td>
+      );
+    });
+
+    this.setState( { head: head, children: children } );
   }
 
   render() {
@@ -175,7 +71,7 @@ class Table extends React.Component {
         </thead>
         <tbody>
           {
-            this.state.rows.map((r, i)=> {
+            this.props.json.map((r, i)=> {
               return (
                 <tr key={i} onClick={this.onrowclick.bind(this, r, i)}>
                   {
@@ -196,5 +92,9 @@ class Table extends React.Component {
     );
   }
 }
+
+Table.defaultProps = {
+  json: []
+};
 
 export default Table;

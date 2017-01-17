@@ -1,31 +1,45 @@
-import React  from "react";
-import { Form, Row, Combobox, TextField, TextAreaField, CheckboxField,
-         ButtonSearch }
-              from "../../lib/components/form";
-import { Panel, Table, Column }
-              from "../../lib/components";
+import React    from "react";
+import ReactDOM from "react-dom";
+import { Form, Row, Combobox, TextField, TextAreaField,CheckboxField,
+         Button }
+                from "../../lib/components/form";
+import { Panel, Table, Column, Router }
+                from "../../lib/components";
 
 class App1 extends React.Component {
 
+  static create() {
+    let app1 = document.createElement("div");
+    app1.id = "app1";
+    document.body.appendChild(app1);
+    ReactDOM.render(<App1></App1>, app1);
+  }
+
   render() {
-
-    let action = function(data) {
-      let container = this.field.closest(".container");
+    const action = function(data) {
+      let container = this.target.closest(".container");
       let form      = container.querySelector("*[name=form1]");
-      let table     = container.querySelector("*[name=table1]");
-      form.component.setData(data);
+      form.component.setData(data[0]);
     }
 
-    let actionError = function() {
-      let container = this.field.closest(".container");
+    const actionError = function() {
+      let container = this.target.closest(".container");
       let table     = container.querySelector("*[name=table1]");
-      table.component.removeRows();
+      let router    = table.closest(".router");
+      router.component.clear();
     }
 
-    let search = (
+    const handlerClick = function() {
+      const form   = this.field.closest("form");
+      const field  = form.querySelector("*[name=id]");
+
+      const router = form.querySelector(".router");
+      router.component.search({ id: [field.value] });
+    }
+
+    const search = (
       <Form
-        name="search"
-      >
+        name="search">
         <Row>
           <TextField
             title      = "Id"
@@ -33,20 +47,23 @@ class App1 extends React.Component {
             name       = "id"
             width      = "250"
           />
-        <ButtonSearch
-            text             = "Buscar"
-            width            = "auto"
-            namespace        = "Nivel1"
-            fieldSearch      = "id"
-            showMessageError = "true"
-            action           = { action }
-            actionError      = { actionError }
-        />
+        <Button
+          text         = "Buscar"
+          width        = "auto"
+          handlerClick = { handlerClick }
+        >
+          <Router
+            autoRouter  = "false"
+            namespace   = "Nivel1"
+            findBy      = "id"
+            action      = { action }
+            actionError = { actionError } />
+        </Button>
         </Row>
       </Form>
     );
 
-    let form = (
+    const form = (
       <Form
         name      = "form1"
         namespace = "Nivel1"
@@ -61,25 +78,30 @@ class App1 extends React.Component {
           />
         </Row>
         <Row>
-          <Combobox
-            title      = "Tipo"
-            titleWidth = "80"
-            name       = "tipo"
-            width      = "auto"
-            namespace  = "Nivel1/Tipo"
-            idValue    = "tipo_id"
-            textValue  = "name"
-          />
-          <Combobox
-            title      = "Sub tipo"
-            titleWidth = "80"
-            name       = "sub_tipo"
-            width      = "200"
-            namespace  = "Nivel1/SubTipo"
-            idValue    = "subt_id"
-            textValue  = "name"
-            filterBy   = "tipo"
-          />
+          <Router
+            namespace = "Nivel1/Tipo"
+            >
+            <Combobox
+              title      = "Tipo"
+              titleWidth = "80"
+              name       = "tipo"
+              width      = "auto"
+              idValue    = "tipo_id"
+              textValue  = "name"
+              />
+          </Router>
+          <Router
+            namespace = "Nivel1/SubTipo"
+            filterBy  = "tipo">
+            <Combobox
+              title      = "Sub tipo"
+              titleWidth = "80"
+              name       = "sub_tipo"
+              width      = "200"
+              idValue    = "subt_id"
+              textValue  = "name"
+              />
+          </Router>
         </Row>
         <Row>
           <TextField
@@ -109,44 +131,42 @@ class App1 extends React.Component {
       </Form>
     );
 
-    let table1 = (
-      <Table
-        name      = "table1"
+    const table1 = (
+      <Router
         namespace = "Nivel2"
-        filterBy  = "form1"
-        idKey     = "niv2_id"
-      >
-        <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
-        <Column name = "name"      title = "Nombre"       width = "auto"></Column>
-        <Column name = "ok"        title = "OK"           width = "50"   type="bool" ></Column>
-        <Column name = "last_date" title = "Ultima Fecha" width = "auto" type="date" format="DD/MM/YYYY"></Column>
-        <Column name = "other"     title = "Otro"         width = "auto"></Column>
-      </Table>
+        filterBy  = "form1">
+        <Table name = "table1" idKey = "niv2_id">
+          <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
+          <Column name = "name"      title = "Nombre"       width = "auto"></Column>
+          <Column name = "ok"        title = "OK"           width = "50"   type="bool" ></Column>
+          <Column name = "last_date" title = "Ultima Fecha" width = "auto" type="date" format="DD/MM/YYYY"></Column>
+          <Column name = "other"     title = "Otro"         width = "auto"></Column>
+        </Table>
+      </Router>
     );
 
-    let table2 = (
-      <Table
-        name         = "table2"
+    const table2 = (
+      <Router
         namespace    = "Nivel3"
-        objectParent = "table1"
-        idKey        = "niv3_id"
-      >
-        <Column name = "niv3_id"     title = "Id"          width = "50"></Column>
-        <Column name = "tipo.name"   title = "Tipo"        width = "100"></Column>
-        <Column name = "description" title = "Descripcion" width = "auto"></Column>
-      </Table>
+        objectParent = "table1">
+        <Table name = "table2" idKey = "niv3_id">
+          <Column name = "niv3_id"     title = "Id"          width = "50"></Column>
+          <Column name = "tipo.name"   title = "Tipo"        width = "100"></Column>
+          <Column name = "description" title = "Descripcion" width = "auto"></Column>
+        </Table>
+      </Router>
     );
 
     return (
       <div className="app container">
         <div className="app1">
           <span className="title">Ejemplo 1</span>
-          <Panel
-            width  = "500"
-            height = "40">
-            {search}
-          </Panel>
-          <Panel
+            <Panel
+              width  = "500"
+              height = "40">
+              {search}
+            </Panel>
+            <Panel
             width  = "500"
             height = "250">
             {form}
@@ -154,19 +174,19 @@ class App1 extends React.Component {
         </div>
         <div className="app2">
           <span className="title">Ejemplo 2</span>
-          <Panel
-            width  = "500"
-            height = "270">
-            {table1}
-          </Panel>
+            <Panel
+              width  = "500"
+              height = "270">
+              {table1}
+            </Panel>
         </div>
         <div className="app3">
           <span className="title">Ejemplo 3</span>
-          <Panel
-            width  = "500"
-            height = "430">
-            {table2}
-          </Panel>
+            <Panel
+              width  = "500"
+              height = "430">
+              {table2}
+            </Panel>
         </div>
       </div>
     );
