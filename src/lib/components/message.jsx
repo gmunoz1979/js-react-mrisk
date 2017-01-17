@@ -13,6 +13,12 @@ class Message extends React.Component {
   }
 
   static showMessage(message, handlerClick) {
+    handlerClick = handlerClick || function() {
+      const parent = this.target.closest(".window-modal");
+      ReactDOM.unmountComponentAtNode(parent);
+      parent.parentNode.removeChild(parent);
+    }
+
     ReactDOM.render(
       <Message handlerClick = { handlerClick }>
         { message }
@@ -38,7 +44,7 @@ class Message extends React.Component {
         className="window"
       >
         <span>{ this.props.children }</span>
-        <button onClick={this.props.handlerClick}>Aceptar</button>
+        <button onClick={this.props.handlerClick.bind(this)}>Aceptar</button>
       </div>
     );
   }
@@ -47,7 +53,7 @@ class Message extends React.Component {
 Message.defaultProps = {
   width:        250,
   height:       100,
-  handlerClick: () => { React.unmountComponentAtNode(this.target.closest(".window-modal")); }
+  handlerClick: null
 };
 
 export default Message;
