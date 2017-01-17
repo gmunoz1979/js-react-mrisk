@@ -1,14 +1,9 @@
-import React         from "react";
-import Panel         from "../../lib/ui/panel";
-import Form          from "../../lib/ui/form/form";
-import Row           from "../../lib/ui/form/row";
-import Combobox      from "../../lib/ui/form/combobox";
-import TextField     from "../../lib/ui/form/textfield";
-import TextAreaField from "../../lib/ui/form/textareafield";
-import CheckboxField from "../../lib/ui/form/checkboxfield";
-import ButtonSearch  from "../../lib/ui/form/buttonsearch";
-import Table         from "../../lib/ui/table";
-import Column        from "../../lib/ui/column";
+import React  from "react";
+import { Form, Row, Combobox, TextField, TextAreaField, CheckboxField,
+         ButtonSearch }
+              from "../../lib/components/form";
+import { Panel, Table, Column }
+              from "../../lib/components";
 
 class App1 extends React.Component {
 

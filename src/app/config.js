@@ -1,4 +1,4 @@
-import Config from "../lib/config";
+import { Config } from "../lib";
 
 Config.Url     = "https://local.halftau.com"
 Config.Context = "Pruebas";
