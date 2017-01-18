@@ -112,29 +112,27 @@ class App extends React.Component {
     );
 
     const table1 = (
-      <Router
-        namespace = "Nivel2"
-        filterBy  = "form1">
-        <Table name = "table1" idKey = "niv2_id">
-          <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
-          <Column name = "name"      title = "Nombre"       width = "auto"></Column>
-          <Column name = "ok"        title = "OK"           width = "50"   type="bool" ></Column>
-          <Column name = "last_date" title = "Ultima Fecha" width = "auto" type="date" format="DD/MM/YYYY"></Column>
-          <Column name = "other"     title = "Otro"         width = "auto"></Column>
-        </Table>
-      </Router>
+      <Table name = "table1" idKey = "niv2_id">
+        <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
+        <Column name = "name"      title = "Nombre"       width = "auto"></Column>
+        <Column name = "ok"        title = "OK"           width = "50"   type="bool" ></Column>
+        <Column name = "last_date" title = "Ultima Fecha" width = "auto" type="date" format="DD/MM/YYYY"></Column>
+        <Column name = "other"     title = "Otro"         width = "auto"></Column>
+          <Router
+            namespace = "Nivel2"
+            filterBy  = "form1" />
+      </Table>
     );
 
     const table2 = (
-      <Router
-        namespace    = "Nivel3"
-        objectParent = "table1">
-        <Table name = "table2" idKey = "niv3_id">
-          <Column name = "niv3_id"     title = "Id"          width = "50"></Column>
-          <Column name = "tipo.name"   title = "Tipo"        width = "100"></Column>
-          <Column name = "description" title = "Descripcion" width = "auto"></Column>
-        </Table>
-      </Router>
+      <Table name = "table2" idKey = "niv3_id">
+        <Column name = "niv3_id"     title = "Id"          width = "50"></Column>
+        <Column name = "tipo.name"   title = "Tipo"        width = "100"></Column>
+        <Column name = "description" title = "Descripcion" width = "auto"></Column>
+        <Router
+          namespace    = "Nivel3"
+          objectParent = "table1" />
+      </Table>
     );
 
     return (
