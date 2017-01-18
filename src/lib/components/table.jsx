@@ -8,7 +8,8 @@ class Table extends React.Component {
 
     this.state = {
       head:  [],
-      child: []
+      child: [],
+      json:  []
     }
   }
 
@@ -61,40 +62,55 @@ class Table extends React.Component {
     this.setState( { head: head, children: children } );
   }
 
+  setData(json) {
+    this.setState({ json: json });
+  }
+
   render() {
+    let columns = [];
+    let router;
+
+    React.Children.map(this.state.children, c => {
+      if (c.type.name === "Router") {
+        router = React.cloneElement(c, { handlerAction: this.setData.bind(this) });
+        return;
+      }
+
+      columns.push(c);
+    });
+
     return (
-      <table name={this.props.name} ref={(table) => { this.table = table }} cellSpacing="0" cellPadding="0">
-        <thead>
-          <tr>
-            { this.state.head }
-          </tr>
-        </thead>
-        <tbody>
-          {
-            this.props.json.map((r, i)=> {
-              return (
-                <tr key={i} onClick={this.onrowclick.bind(this, r, i)}>
-                  {
-                    React.Children.map(this.state.children, child =>
-                      React.cloneElement(child,
-                        {
-                          value: r[child.props.name]
-                        }
+      <div>
+        <table name={this.props.name} ref={(table) => { this.table = table }} cellSpacing="0" cellPadding="0">
+          <thead>
+            <tr>
+              { this.state.head }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.state.json.map((r, i)=> {
+                return (
+                  <tr key={i} onClick={this.onrowclick.bind(this, r, i)}>
+                    {
+                      React.Children.map(columns, child =>
+                        React.cloneElement(child,
+                          {
+                            value: r[child.props.name]
+                          }
+                        )
                       )
-                    )
-                  }
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>
+                    }
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+        { router && router }
+      </div>
     );
   }
 }
-
-Table.defaultProps = {
-  json: []
-};
 
 export default Table;
