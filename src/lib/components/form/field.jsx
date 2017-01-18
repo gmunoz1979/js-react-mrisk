@@ -6,10 +6,14 @@ class Field extends React.Component {
     this.field.component = this;
   }
 
+  get value() {
+    return this.field.value;
+  }
+
   render(children) {
     const width      = this.props.width + "px";
     const titleWidth = this.props.titleWidth + "px";
-    
+
     return (
       <div style = {{ width: width }}>
         <label style = {{ width: titleWidth }}>
