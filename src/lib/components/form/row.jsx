@@ -20,18 +20,16 @@ class Row extends React.Component {
 
     const width = (this.props.width - staticWidth - (margin * (len - 1))) /
                   lenAuto;
-
     return (
       <div className="form-row" style={{ width: this.props.width + "px" }}>
         {
           React.Children.map(this.props.children, child => {
-            if (child.props.width === "auto") {
-              return React.cloneElement(child, {
-                width: width
-              });
-            }
+            const w = child.props.width === "auto" ? width : child.props.width;
 
-            return child;
+            return React.cloneElement(child, {
+              width: w,
+              mode:  this.props.mode
+            });
           })
         }
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Field from "./field";
+import Form  from "./form";
 
 class Combobox extends Field {
 
@@ -24,7 +25,12 @@ class Combobox extends Field {
     let c      = field.component;
     let router = field.parentNode.querySelector(".router");
     let value  = json[`${c.props.name}.${c.props.idValue}`];
-    field.value = value;
+
+    if (field.classList.contains("combobox")) {
+      field.value = json[`${c.props.name}.${c.props.textValue}`];
+    } else {
+      field.value = value;
+    }
 
     if (!router || !router.component.props.filterBy) {
       return;
@@ -32,11 +38,21 @@ class Combobox extends Field {
 
     let cbx       = form.querySelector(`*[name=${router.component.props.filterBy}]`);
     let cbx_value = json[`${c.props.name}.${cbx.component.props.name}.${cbx.component.props.idValue}`];
-    cbx.value = cbx_value;
+
+    if (cbx.classList.contains("combobox")) {
+      cbx.value = json[`${c.props.name}.${cbx.component.props.name}.${cbx.component.props.textValue}`];
+    } else {
+      cbx.value = cbx_value;
+    }
+
     let data = await router.component.getData({ id: [cbx_value] })
     router.component.setState({ json: data });
 
-    field.value = value;
+    if (field.classList.contains("combobox")) {
+      field.value = json[`${c.props.name}.${c.props.textValue}`];
+    } else {
+      field.value = value;
+    }
   }
 
   handlerAction(json) {
@@ -63,20 +79,35 @@ class Combobox extends Field {
       }
     });
 
-    const style  = {width: (this.props.width - this.props.titleWidth) + "px"};
+    const style  = {width: (this.props.width - this.props.titleWidth - 5) + "px"};
     const values = this.insertDefault(this.state.json);
+
+    const select = (
+      <select
+        style    = { style }
+        name     = { this.props.name }
+        ref      = { field => this.field = field }
+        onChange = { this.handlerChange.bind(this) } >
+        { values.map((o, i) => {
+          return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
+        }) }
+      </select>
+    );
+
+    const input = (
+      <input
+        type      = "text"
+        className = "combobox"
+        style     = { style }
+        name      = { this.props.name }
+        ref       = { field => this.field = field }
+        readOnly  = { true } />
+    );
 
     const field = (
       <div>
-        <select
-          style    = { style }
-          name     = { this.props.name }
-          ref      = { field => this.field = field }
-          onChange = { this.handlerChange.bind(this) } >
-          { values.map((o, i) => {
-            return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
-          }) }
-        </select>
+        { this.props.mode === Form.ModeType.VIEW && input  }
+        { this.props.mode !== Form.ModeType.VIEW && select }
         { router && router }
       </div>
     );

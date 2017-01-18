@@ -1,5 +1,6 @@
 import React from "react";
 import Field from "./field";
+import Form  from "./form";
 
 class CheckboxField extends Field {
 
@@ -9,7 +10,8 @@ class CheckboxField extends Field {
         <input
           type = "checkbox"
           name = { this.props.name }
-          ref  = { field => this.field = field } />
+          ref  = { field => this.field = field }
+          disabled = { this.props.mode === Form.ModeType.VIEW } />
         <label>
           {this.props.text}
         </label>

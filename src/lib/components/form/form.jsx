@@ -1,6 +1,12 @@
 import React    from "react";
 import Combobox from "./combobox";
 
+const ModeType = {
+  NEW:  0,
+  EDIT: 1,
+  VIEW: 2
+}
+
 class Form extends React.Component {
 
   constructor(props) {
@@ -9,6 +15,10 @@ class Form extends React.Component {
     this.state = {
       width: 0
     }
+  }
+
+  static get ModeType() {
+    return ModeType;
   }
 
   getFields(json) {
@@ -44,7 +54,7 @@ class Form extends React.Component {
 
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
-        if (field.nodeName === "SELECT") {
+        if (field.nodeName === "SELECT" || field.classList.contains("combobox")) {
           Combobox.updateCombobox(k, json, field, this.form);
           continue;
         }
@@ -110,13 +120,18 @@ class Form extends React.Component {
         ref  = { form => this.form = form }
         onSubmit = { this.handlerSubmit.bind(this) }
       >
-        { React.Children.map(children, c => React.cloneElement(c, { width: width })) }
+        { React.Children.map(children, c => React.cloneElement(c,
+          {
+            width: width ,
+            mode:  this.props.mode
+          })) }
       </form>
     );
   }
 }
 
 Form.defaultProps = {
+  mode:          Form.ModeType.NEW,
   handlerSubmit: function() {}
 };
 
