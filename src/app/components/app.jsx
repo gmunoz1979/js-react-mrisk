@@ -6,13 +6,13 @@ import { Form, Row, Combobox, TextField, TextAreaField,CheckboxField,
 import { Panel, Table, Column, Router }
                 from "../../lib/components";
 
-class App1 extends React.Component {
+class App extends React.Component {
 
   static create() {
     let app1 = document.createElement("div");
     app1.id = "app1";
     document.body.appendChild(app1);
-    ReactDOM.render(<App1></App1>, app1);
+    ReactDOM.render(<App></App>, app1);
   }
 
   render() {
@@ -193,4 +193,4 @@ class App1 extends React.Component {
   }
 }
 
-export default App1;
+export default App;
