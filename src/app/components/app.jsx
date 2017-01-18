@@ -16,25 +16,14 @@ class App extends React.Component {
   }
 
   render() {
-    const action = function(data) {
-      let container = this.target.closest(".container");
-      let form      = container.querySelector("*[name=form1]");
-      form.component.setData(data[0]);
-    }
-
-    const actionError = function() {
-      let container = this.target.closest(".container");
-      let table     = container.querySelector("*[name=table1]");
-      let router    = table.closest(".router");
-      router.component.clear();
-    }
-
     const handlerClick = function() {
-      const form   = this.field.closest("form");
-      const field  = form.querySelector("*[name=id]");
+      const search    = this.field.closest("form");
+      const field     = search.querySelector("*[name=id]");
+      const container = this.field.closest(".container");
+      const form1     = container.querySelector("*[name=form1]");
+      const router    = form1.querySelector(".router");
 
-      const router = form.querySelector(".router");
-      router.component.search({ id: [field.value] });
+      router.component.fetchById([field.value]);
     }
 
     const search = (
@@ -47,18 +36,11 @@ class App extends React.Component {
             name       = "id"
             width      = "250"
           />
-        <Button
-          text         = "Buscar"
-          width        = "auto"
-          handlerClick = { handlerClick }
-        >
-          <Router
-            autoRouter  = "false"
-            namespace   = "Nivel1"
-            findBy      = "id"
-            action      = { action }
-            actionError = { actionError } />
-        </Button>
+          <Button
+            text         = "Buscar"
+            width        = "auto"
+            handlerClick = { handlerClick }
+          />
         </Row>
       </Form>
     );
@@ -66,9 +48,12 @@ class App extends React.Component {
     const form = (
       <Form
         name      = "form1"
-        namespace = "Nivel1"
         fieldKey  = "niv1_id"
         >
+        <Router
+          autoRouter = {false}
+          namespace  = "Nivel1"
+        />
         <Row>
           <TextField
             title      = "Id"
@@ -121,7 +106,7 @@ class App extends React.Component {
           <CheckboxField
             name    = "a_bool"
             text    = "A Bool"
-            checked = "false"
+            checked = {false}
             widht   = "100"
           />
         </Row>
