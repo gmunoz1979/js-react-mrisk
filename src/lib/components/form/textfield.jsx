@@ -3,12 +3,6 @@ import Field from "./field";
 
 class TextField extends Field {
 
-  handlerChange(e) {
-    let event = new CustomEvent("update");
-
-    this.field.dispatchEvent(event);
-  }
-
   render() {
     const style = { width: (this.props.width - this.props.titleWidth) + "px" };
 
@@ -17,8 +11,7 @@ class TextField extends Field {
         style    = { style }
         type     = "text"
         name     = { this.props.name }
-        ref      = { field => this.field = field }
-        onChange = { this.handlerChange.bind(this) } />
+        ref      = { field => this.field = field } />
     );
 
     return super.render(field);
