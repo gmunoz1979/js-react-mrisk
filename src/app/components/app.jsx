@@ -22,7 +22,9 @@ class App extends React.Component {
   render() {
     const search = (
       <Form
-        name="search">
+        ref           = { form => this.search = form }
+        name          = "search"
+        handlerSubmit = { this.handlerClick.bind(this) }>
         <Row>
           <TextField
             ref        = { field => this.field = field }
@@ -34,7 +36,7 @@ class App extends React.Component {
           <Button
             text         = "Buscar"
             width        = "auto"
-            handlerClick = { this.handlerClick.bind(this) }
+            handlerClick = { () => this.search.handlerSubmit() }
           />
         </Row>
       </Form>
