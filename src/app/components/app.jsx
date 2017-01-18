@@ -9,10 +9,10 @@ import { Panel, Table, Column, Router }
 class App extends React.Component {
 
   static create() {
-    let app1 = document.createElement("div");
-    app1.id = "app1";
-    document.body.appendChild(app1);
-    ReactDOM.render(<App></App>, app1);
+    const app = document.createElement("div");
+    app.id = "app1";
+    document.body.appendChild(app);
+    ReactDOM.render(<App></App>, app);
   }
 
   render() {
@@ -78,30 +78,27 @@ class App extends React.Component {
           />
         </Row>
         <Row>
-          <Router
-            namespace = "Nivel1/Tipo"
-            >
-            <Combobox
-              title      = "Tipo"
-              titleWidth = "80"
-              name       = "tipo"
-              width      = "auto"
-              idValue    = "tipo_id"
-              textValue  = "name"
-              />
-          </Router>
-          <Router
-            namespace = "Nivel1/SubTipo"
-            filterBy  = "tipo">
-            <Combobox
-              title      = "Sub tipo"
-              titleWidth = "80"
-              name       = "sub_tipo"
-              width      = "200"
-              idValue    = "subt_id"
-              textValue  = "name"
-              />
-          </Router>
+          <Combobox
+            title      = "Tipo"
+            titleWidth = "80"
+            name       = "tipo"
+            width      = "auto"
+            idValue    = "tipo_id"
+            textValue  = "name" >
+            <Router
+              namespace = "Nivel1/Tipo" />
+          </Combobox>
+          <Combobox
+            title      = "Sub tipo"
+            titleWidth = "80"
+            name       = "sub_tipo"
+            width      = "200"
+            idValue    = "subt_id"
+            textValue  = "name">
+            <Router
+              namespace = "Nivel1/SubTipo"
+              filterBy  = "tipo" />
+          </Combobox>
         </Row>
         <Row>
           <TextField
