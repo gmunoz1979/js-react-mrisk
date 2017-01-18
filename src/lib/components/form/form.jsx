@@ -29,7 +29,19 @@ class Form extends React.Component {
     return !this.json ? null : this.json[this.props.fieldKey];
   }
 
+  isArray(o) {
+    const types = 'Array Object String Date Function Boolean Number Null Undefined'.split(' ');
+
+    const type = function() {
+      return Object.prototype.toString.call(this).slice(8, -1);
+    }
+
+    return types[0] === type.call(o);
+  }
+
   setData(json={}) {
+    json = this.isArray(json) ? json[0] : json;
+
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
         if (field.nodeName === "SELECT") {
@@ -70,14 +82,15 @@ class Form extends React.Component {
     field.addEventListener("change", e => this.getData({ id: [ e.currentTarget.value] }).then(json => this.setData(json)));
   }
 
-  handlerAction(json) {
-    this.setData(json[0]);
+  fetchById(filter) {
+    const router = this.form.querySelector(".router");
+    return router.component.fetchById(filter);
   }
 
   render() {
     const children = React.Children.map(this.props.children, (c) => {
       if (c.type.name === "Router") {
-        return React.cloneElement(c, { handlerAction: this.handlerAction.bind(this) });
+        return React.cloneElement(c, { handlerAction: this.setData.bind(this) });
       }
 
       return c;
