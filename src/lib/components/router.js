@@ -95,6 +95,8 @@ class Router extends React.Component {
           }
         );
 
+        this.props.handlerAction(json);
+
         return json;
       }
 
@@ -110,6 +112,8 @@ class Router extends React.Component {
         if (response.status === 404) {
           message = `Error ${response.status} - No existe registro`;
         }
+
+        this.props.handlerError(response);
 
         Message.showMessage(message, handlerClick);
       }
@@ -176,7 +180,9 @@ Router.defaultProps = {
   filterBy:         null,
   objectParent:     null,
   action:           function() {},
-  actionError:      function() {}
+  actionError:      function() {},
+  handlerAction:    function() {},
+  handlerError:     function() {}
 };
 
 export default Router;

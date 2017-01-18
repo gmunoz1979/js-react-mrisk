@@ -8,19 +8,21 @@ class Combobox extends Field {
     this.state = { json: [] };
   }
 
-  updateValues(values) {
-    let value = {};
-    value[this.props.idValue]   = 0;
-    value[this.props.textValue] = "Seleccione"
+  insertDefault(values) {
+    values = [].slice.call(values);
 
-    values.unshift(value);
+    let _default = {};
+    _default[this.props.idValue]   = 0;
+    _default[this.props.textValue] = "Seleccione";
+
+    values.unshift(_default);
 
     return values;
   }
 
   static async updateCombobox(k, json, field, form) {
     let c      = field.component;
-    let router = field.closest(".router");
+    let router = field.parentNode.querySelector(".router");
     let value  = json[`${c.props.name}.${c.props.idValue}`];
     field.value = value;
 
@@ -37,30 +39,50 @@ class Combobox extends Field {
     field.value = value;
   }
 
+  handlerAction(json) {
+    this.field.value = "";
+    this.setState({ json: json });
+  }
+
+  handlerChange(e) {
+    let event = new CustomEvent("update",
+      {
+        detail: {}
+      }
+    );
+
+    e.target.dispatchEvent(event);
+  }
+
   render() {
-    const style = {width: (this.props.width - this.props.titleWidth) + "px"};
+    let router =  null;
+
+    React.Children.map(this.props.children, (c) => {
+      if (c.type.name === "Router") {
+        router = React.cloneElement(c, { handlerAction: this.handlerAction.bind(this) });
+      }
+    });
+
+    const style  = {width: (this.props.width - this.props.titleWidth) + "px"};
+    const values = this.insertDefault(this.state.json);
 
     const field = (
-      <select
-        style = { style }
-        name  = { this.props.name }
-        ref   = { field => this.field = field }
-      >
-        {this.updateValues(this.props.json).map((o, i) => { return (
-            <option key={i} value={ o[this.props.idValue]}>
-              { o[this.props.textValue] }
-            </option>
-          );
-        })}
-      </select>
+      <div>
+        <select
+          style    = { style }
+          name     = { this.props.name }
+          ref      = { field => this.field = field }
+          onChange = { this.handlerChange.bind(this) } >
+          { values.map((o, i) => {
+            return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
+          }) }
+        </select>
+        { router && router }
+      </div>
     );
 
     return super.render(field);
   }
 }
-
-Combobox.defaultProps = {
-  json: []
-};
 
 export default Combobox;
