@@ -1,6 +1,6 @@
 import React    from "react";
 import ReactDOM from "react-dom";
-import { Form, Row, Combobox, TextField, TextAreaField,CheckboxField,
+import { Form, Row, Combobox, TextField, TextAreaField,CheckboxField, Empty,
          Button }
                 from "../../lib/components/form";
 import { Panel, Table, Column, Router }
@@ -44,6 +44,7 @@ class App extends React.Component {
 
     const form = (
       <Form
+        mode      = { Form.ModeType.VIEW }
         ref       = { form => this.form1 = form }
         name      = "form1"
         fieldKey  = "niv1_id"
@@ -58,6 +59,9 @@ class App extends React.Component {
             titleWidth = "80"
             name       = "niv1_id"
             width      = "250"
+          />
+          <Empty
+            width      = "auto"
           />
         </Row>
         <Row>
@@ -106,6 +110,9 @@ class App extends React.Component {
             text    = "A Bool"
             checked = {false}
             widht   = "100"
+          />
+          <Empty
+            width   = "auto"
           />
         </Row>
       </Form>
