@@ -21,9 +21,8 @@ class App extends React.Component {
       const field     = search.querySelector("*[name=id]");
       const container = this.field.closest(".container");
       const form1     = container.querySelector("*[name=form1]");
-      const router    = form1.querySelector(".router");
 
-      router.component.fetchById([field.value]);
+      form1.component.fetchById([field.value]);
     }
 
     const search = (
