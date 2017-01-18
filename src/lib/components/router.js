@@ -77,20 +77,20 @@ class Router extends React.Component {
         let data = await response.json();
         data = data.length ? data : [data];
 
+        let fn = (item, o, prefix="") => {
+          for (const key in item) {
+            if (typeof(item[key]) === "object" && !this.isDate(item[key])) {
+              fn(item[key], o, prefix + key + ".");
+            } else {
+              o[prefix+key] = item[key];
+            }
+          }
+        }
+
         let json = data.map(json =>
           {
             let o = {}
-
-            for (let key in json) {
-              if (typeof(json[key]) === "object" && !this.isDate(json[key])) {
-                for (let k in json[key]) {
-                  o[key + "." + k] = json[key][k];
-                }
-              } else {
-                o[key] = json[key];
-              }
-            }
-
+            fn(json, o);
             return o;
           }
         );
