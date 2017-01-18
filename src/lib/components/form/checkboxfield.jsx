@@ -4,7 +4,7 @@ import Field from "./field";
 class CheckboxField extends Field {
 
   render() {
-    let field = (
+    const field = (
       <div>
         <input
           type = "checkbox"
