@@ -1,4 +1,5 @@
-import React from "react";
+import React    from "react";
+import Combobox from "./combobox";
 
 class Form extends React.Component {
 
@@ -15,32 +16,13 @@ class Form extends React.Component {
 
     for (let [k, v] of Object.entries(json)) {
       if (/\./g.exec(k)) {
-        continue;
+        k = k.split(/\./)[0];
       }
 
       fields[k] = this.form.querySelector(`*[name=${k}]`);
     }
 
     return fields;
-  }
-
-  async updateCombobox(k, json, field) {
-    let c     = field.component;
-    let value = json[k][c.props.idValue];
-    field.value = value;
-
-    if (!c.props.filterBy) {
-      return;
-    }
-
-
-    let cbx = this.form.querySelector(`*[name=${c.props.filterBy}]`);
-    let cbx_obj   = json[k][cbx.component.props.name];
-    let cbx_value = cbx_obj[cbx.component.props.idValue];
-    cbx.value = cbx_value;
-
-    await c.getData({ id: [cbx_value] });
-    field.value = value;
   }
 
   get idValue() {
@@ -51,7 +33,7 @@ class Form extends React.Component {
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
         if (field.nodeName === "SELECT") {
-          this.updateCombobox(k, json, field);
+          Combobox.updateCombobox(k, json, field, this.form);
           continue;
         }
         if (field.type === "checkbox") {
