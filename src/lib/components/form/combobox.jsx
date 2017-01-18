@@ -18,25 +18,29 @@ class Combobox extends Field {
     return values;
   }
 
-  componentDidMount() {
-    super.componentDidMount();
+  static async updateCombobox(k, json, field, form) {
+    let c      = field.component;
+    let router = field.closest(".router");
+    let value  = json[`${c.props.name}.${c.props.idValue}`];
+    field.value = value;
 
-    if (!this.props.filterBy) {
+    if (!router || !router.component.props.filterBy) {
       return;
     }
 
-    let field = this.field.closest("form").querySelector(`*[name="${this.props.filterBy}"]`);
+    let cbx       = form.querySelector(`*[name=${router.component.props.filterBy}]`);
+    let cbx_value = json[`${c.props.name}.${cbx.component.props.name}.${cbx.component.props.idValue}`];
+    cbx.value = cbx_value;
+    let data = await router.component.getData({ id: [cbx_value] })
+    router.component.setState({ json: data });
 
-    // field.addEventListener("change", e => {
-    //   this.field.value = "";
-    //   this.getData({ id: [e.currentTarget.value] });
-    // });
+    field.value = value;
   }
 
   render() {
     const style = {width: (this.props.width - this.props.titleWidth) + "px"};
 
-    let field = (
+    const field = (
       <select
         style = { style }
         name  = { this.props.name }
