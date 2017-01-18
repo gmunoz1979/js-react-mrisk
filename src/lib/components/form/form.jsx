@@ -101,7 +101,7 @@ class Form extends React.Component {
     return (
       <form autoComplete="off"
         name = { this.props.name }
-        ref  = { form => {this.form = form;} }
+        ref  = { form => this.form = form }
       >
         { React.Children.map(children, c => React.cloneElement(c, { width: width })) }
       </form>
