@@ -87,6 +87,12 @@ class Form extends React.Component {
     return router.component.fetchById(filter);
   }
 
+  handlerSubmit(e) {
+    this.props.handlerSubmit(e);
+    e && e.preventDefault();
+    return false;
+  }
+
   render() {
     const children = React.Children.map(this.props.children, (c) => {
       if (c.type.name === "Router") {
@@ -102,11 +108,16 @@ class Form extends React.Component {
       <form autoComplete="off"
         name = { this.props.name }
         ref  = { form => this.form = form }
+        onSubmit = { this.handlerSubmit.bind(this) }
       >
         { React.Children.map(children, c => React.cloneElement(c, { width: width })) }
       </form>
     );
   }
 }
+
+Form.defaultProps = {
+  handlerSubmit: function() {}
+};
 
 export default Form;
