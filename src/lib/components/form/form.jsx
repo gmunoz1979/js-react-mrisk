@@ -70,7 +70,19 @@ class Form extends React.Component {
     field.addEventListener("change", e => this.getData({ id: [ e.currentTarget.value] }).then(json => this.setData(json)));
   }
 
+  handlerAction(json) {
+    this.setData(json[0]);
+  }
+
   render() {
+    const children = React.Children.map(this.props.children, (c) => {
+      if (c.type.name === "Router") {
+        return React.cloneElement(c, { handlerAction: this.handlerAction.bind(this) });
+      }
+
+      return c;
+    });
+
     const width = this.state.width;
 
     return (
@@ -78,7 +90,7 @@ class Form extends React.Component {
         name = { this.props.name }
         ref  = { form => {this.form = form;} }
       >
-        { React.Children.map(this.props.children, c => React.cloneElement(c, { width: width })) }
+        { React.Children.map(children, c => React.cloneElement(c, { width: width })) }
       </form>
     );
   }

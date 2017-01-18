@@ -22,8 +22,8 @@ class Router extends React.Component {
     );
   }
 
-  getUrl() {
-    return `${Config.Url}/${Config.Context}/${Config.Handler}/${this.props.namespace}/${this.function_name}.json`;
+  getUrl(function_name = this.function_name) {
+    return `${Config.Url}/${Config.Context}/${Config.Handler}/${this.props.namespace}/${function_name}.json`;
   }
 
   hasValue(o) {
@@ -64,8 +64,13 @@ class Router extends React.Component {
     this.setState({ json: [] });
   }
 
-  async getData(params) {
-    let url = this.getUrl() + (params ? "?options=" + JSON.stringify(params) : "");
+  async fetchById(filter) {
+    let json = await this.getData({ id: filter }, "fetchById");
+    return json;
+  }
+
+  async getData(params, function_name) {
+    let url = this.getUrl(function_name) + (params ? "?options=" + JSON.stringify(params).replace(/(\"|\'|\s)/g, "") : "");
 
     try {
       let response = await fetch(url, {
@@ -171,6 +176,18 @@ class Router extends React.Component {
       </div>
     );
   }
+}
+
+Router.propTypes = {
+  autoRouter:       React.PropTypes.bool,
+  method:           React.PropTypes.string,
+  showMessageError: React.PropTypes.bool,
+  filterBy:         React.PropTypes.string,
+  objectParent:     React.PropTypes.string,
+  action:           React.PropTypes.func,
+  actionError:      React.PropTypes.func,
+  handlerAction:    React.PropTypes.func,
+  handlerError:     React.PropTypes.func
 }
 
 Router.defaultProps = {
