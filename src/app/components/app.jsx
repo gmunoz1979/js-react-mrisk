@@ -15,21 +15,17 @@ class App extends React.Component {
     ReactDOM.render(<App></App>, app);
   }
 
+  handlerClick() {
+    this.form1.fetchById([this.field.value]);
+  }
+
   render() {
-    const handlerClick = function() {
-      const search    = this.field.closest("form");
-      const field     = search.querySelector("*[name=id]");
-      const container = this.field.closest(".container");
-      const form1     = container.querySelector("*[name=form1]");
-
-      form1.component.fetchById([field.value]);
-    }
-
     const search = (
       <Form
         name="search">
         <Row>
           <TextField
+            ref        = { field => this.field = field }
             title      = "Id"
             titleWidth = "80"
             name       = "id"
@@ -38,7 +34,7 @@ class App extends React.Component {
           <Button
             text         = "Buscar"
             width        = "auto"
-            handlerClick = { handlerClick }
+            handlerClick = { this.handlerClick.bind(this) }
           />
         </Row>
       </Form>
@@ -46,6 +42,7 @@ class App extends React.Component {
 
     const form = (
       <Form
+        ref       = { form => this.form1 = form }
         name      = "form1"
         fieldKey  = "niv1_id"
         >
