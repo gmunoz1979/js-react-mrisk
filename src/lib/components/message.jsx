@@ -29,7 +29,7 @@ class Message extends React.Component {
 
   componentDidMount() {
     let parent = this.target.parentNode;
-    const cw = (parent.clientWidth/2)  - (this.props.width/2);
+    const cw = (parent.clientWidth/2)  - (this.target.clientWidth/2);
     const ch = (parent.clientHeight/2) - (this.props.height/2);
 
     this.target.style.top  = ch + "px";
@@ -40,7 +40,7 @@ class Message extends React.Component {
     return (
       <div
         ref = { target => this.target = target }
-        style = {{ width: this.props.width + "px", height: this.props.height + "px" }}
+        style = {{ miWwidth: this.props.width + "px", height: this.props.height + "px" }}
         className="window"
       >
         <span>{ this.props.children }</span>

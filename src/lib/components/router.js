@@ -106,20 +106,43 @@ class Router extends React.Component {
       }
 
       if (this.props.showMessageError) {
-        let message = "";
+        let message = `Error ${response.status} - `;
         let handlerClick = null;
 
         if (response.status === 401) {
-          message = `Error ${response.status} - Sin autorización`;
+          message += "Sin autorización";
           handlerClick = () => window.location.href = Config.Redirect;
         }
 
         if (response.status === 404) {
-          message = `Error ${response.status} - No existe registro`;
+          message += "No existe registro";
+        }
+
+        if (response.status === 500) {
+          const reader = response.body.getReader();
+          let buffer = new Uint8Array(0);
+          let self = this;
+          reader.read().then(function processResult(result) {
+
+            if (result.done) {
+              const json = JSON.parse(new TextDecoder("utf-8").decode(buffer));
+              self.props.handlerError(json);
+              Message.showMessage(json.message, handlerClick);
+              return;
+            }
+
+            let tmp = new Uint8Array(buffer.byteLength + result.value.byteLength);
+            tmp.set(buffer, 0);
+            tmp.set(result.value, buffer.byteLength);
+            buffer = tmp;
+
+            return reader.read().then(processResult);
+          });
+
+          return;
         }
 
         this.props.handlerError(response);
-
         Message.showMessage(message, handlerClick);
       }
 
