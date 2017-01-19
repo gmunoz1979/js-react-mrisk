@@ -103,8 +103,14 @@ class Form extends React.Component {
   }
 
   handlerSave(e) {
+    let fd = new FormData(this.form);
+
+    [].slice.call(this.form.querySelectorAll("input[type=checkbox]")).forEach(e => {
+      fd.set(e.name, fd.has(e.name));
+    });
+
     let data = {};
-    for (let [k, v] of new FormData(this.form).entries()) {
+    for (let [k, v] of fd.entries()) {
       data[k] = v;
     }
 
