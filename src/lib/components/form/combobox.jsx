@@ -40,7 +40,7 @@ class Combobox extends Field {
     const cbx_p      = cbx.component.props;
     const cbx_path   = `${p.name}.${cbx_p.name}.${cbx_isView ? cbx_p.textValue : cbx_p.idValue}`
 
-    cbx.value = json[path];
+    cbx.value = json[cbx_path];
 
     if (!cbx_isView) {
       let data = await router.component.getData({ id: [cbx.value] })
