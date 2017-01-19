@@ -1,5 +1,7 @@
 import React    from "react";
 import Combobox from "./combobox";
+import Row      from "./row";
+import Button   from "./button";
 
 const ModeType = {
   NEW:  0,
@@ -103,14 +105,45 @@ class Form extends React.Component {
     return false;
   }
 
+  handlerSave(e) {
+    let data = {};
+    for (let [k, v] of new FormData(this.form).entries()) {
+      data[k] = v;
+    }
+
+    const router = this.form.querySelector(".router");
+    return router.component.create(data);
+  }
+
   render() {
-    const children = React.Children.map(this.props.children, (c) => {
+    let hasRouter = false;
+
+    let children = React.Children.map(this.props.children, (c) => {
       if (c.type.name === "Router") {
+        hasRouter = true;
         return React.cloneElement(c, { handlerAction: this.setData.bind(this) });
       }
 
       return c;
     });
+
+    if (hasRouter && this.props.mode !== Form.ModeType.VIEW) {
+      children.push(
+        <Row>
+          <Button
+            text         = "Guardar"
+            width        = "auto"
+            handlerClick = { this.handlerSave.bind(this) }
+            />
+        </Row>
+      );
+    }
+
+    const saveButton = (
+      <Row>
+        <Button text="Guardar" width="auto" handlerClick={this.handlerSave.bind()}></Button>
+      </Row>
+    )
 
     const width = this.state.width;
 

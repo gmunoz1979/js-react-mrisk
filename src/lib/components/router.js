@@ -64,6 +64,20 @@ class Router extends React.Component {
     this.setState({ json: [] });
   }
 
+  async create(data) {
+    let url = this.getUrl("create");
+
+    try {
+      let response = await fetch(url, {
+        method:  "POST",
+        headers: this.getHeaders(),
+        body: JSON.stringify(data)
+      });
+    } catch(err) {
+      throw err;
+    }
+  }
+
   async fetchById(filter) {
     let json = await this.getData({ id: filter }, "fetchById");
     return json;
