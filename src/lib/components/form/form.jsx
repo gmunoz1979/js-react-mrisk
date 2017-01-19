@@ -89,9 +89,6 @@ class Form extends React.Component {
     if (!this.props.fieldKey) {
       return;
     }
-
-    let field = this.form.querySelector(`*[name=${this.props.fieldKey}]`);
-    field.addEventListener("change", e => this.getData({ id: [ e.currentTarget.value] }).then(json => this.setData(json)));
   }
 
   fetchById(filter) {
