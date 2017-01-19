@@ -34,6 +34,8 @@ class Message extends React.Component {
 
     this.target.style.top  = ch + "px";
     this.target.style.left = cw + "px";
+
+    document.activeElement.blur();
   }
 
   render() {
