@@ -22,36 +22,31 @@ class Combobox extends Field {
   }
 
   static async updateCombobox(k, json, field, form) {
-    let c      = field.component;
-    let router = field.parentNode.querySelector(".router");
-    let value  = json[`${c.props.name}.${c.props.idValue}`];
+    const isView = field.classList.contains("combobox");
+    const c = field.component;
+    const p = c.props;
+    const path = `${p.name}.${isView ? p.textValue : p.idValue}`;
 
-    if (field.classList.contains("combobox")) {
-      field.value = json[`${c.props.name}.${c.props.textValue}`];
-    } else {
-      field.value = value;
-    }
+    field.value = json[path];
+
+    const router = field.parentNode.querySelector(".router");
 
     if (!router || !router.component.props.filterBy) {
       return;
     }
 
-    let cbx       = form.querySelector(`*[name=${router.component.props.filterBy}]`);
-    let cbx_value = json[`${c.props.name}.${cbx.component.props.name}.${cbx.component.props.idValue}`];
+    const cbx        = form.querySelector(`*[name=${router.component.props.filterBy}]`);
+    const cbx_isView = cbx.classList.contains("combobox");
+    const cbx_p      = cbx.component.props;
+    const cbx_path   = `${p.name}.${cbx_p.name}.${cbx_isView ? cbx_p.textValue : cbx_p.idValue}`
 
-    if (cbx.classList.contains("combobox")) {
-      cbx.value = json[`${c.props.name}.${cbx.component.props.name}.${cbx.component.props.textValue}`];
-    } else {
-      cbx.value = cbx_value;
-    }
+    cbx.value = json[path];
 
-    let data = await router.component.getData({ id: [cbx_value] })
-    router.component.setState({ json: data });
+    if (!cbx_isView) {
+      let data = await router.component.getData({ id: [cbx.value] })
+      router.component.setState({ json: data });
 
-    if (field.classList.contains("combobox")) {
-      field.value = json[`${c.props.name}.${c.props.textValue}`];
-    } else {
-      field.value = value;
+      field.value = json[path];
     }
   }
 
