@@ -70,7 +70,13 @@ class Combobox extends Field {
 
     React.Children.map(this.props.children, (c) => {
       if (c.type.name === "Router") {
-        router = React.cloneElement(c, { handlerAction: this.handlerAction.bind(this) });
+        let props = { handlerAction: this.handlerAction.bind(this) };
+
+        if (this.props.mode === Form.ModeType.VIEW) {
+          props.autoRouter = false;
+        }
+
+        router = React.cloneElement(c, props);
       }
     });
 
