@@ -8,6 +8,14 @@ import { Panel, Table, Column, Router }
 
 class App extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      mode: "view"
+    }
+  }
+
   static create() {
     const app = document.createElement("div");
     app.id = "app1";
@@ -17,6 +25,11 @@ class App extends React.Component {
 
   handlerClick() {
     this.form1.fetchById([this.field.value]);
+  }
+
+  handlerChange() {
+    const new_mode = this.state.mode === "view" ? "new" : "view";
+    this.setState({"mode": new_mode});
   }
 
   render() {
@@ -38,11 +51,16 @@ class App extends React.Component {
             width        = "auto"
             handlerClick = { () => this.search.handlerSubmit() }
           />
+          <Button
+            text         = "Cambiar Modo"
+            width        = "auto"
+            handlerClick = { this.handlerChange.bind(this) }
+          />
         </Row>
       </Form>
     );
 
-    const form = (
+    const form1 = (
       <Form
         mode      = { Form.ModeType.VIEW }
         ref       = { form => this.form1 = form }
@@ -118,6 +136,82 @@ class App extends React.Component {
       </Form>
     );
 
+    const form2 = (
+      <Form
+        mode      = { Form.ModeType.NEW }
+        ref       = { form => this.form1 = form }
+        name      = "form2"
+        fieldKey  = "niv1_id"
+        >
+        <Router
+          autoRouter = {false}
+          namespace  = "Nivel1"
+        />
+        <Row>
+          <TextField
+            title      = "Id"
+            titleWidth = "80"
+            name       = "niv1_id"
+            width      = "250"
+          />
+          <Empty
+            width      = "auto"
+          />
+        </Row>
+        <Row>
+          <Combobox
+            title      = "Tipo"
+            titleWidth = "80"
+            name       = "tipo_id"
+            width      = "auto"
+            idValue    = "tipo_id"
+            textValue  = "name" >
+            <Router
+              namespace = "Nivel1/Tipo" />
+          </Combobox>
+          <Combobox
+            title      = "Sub tipo"
+            titleWidth = "80"
+            name       = "subt_id"
+            width      = "200"
+            idValue    = "subt_id"
+            textValue  = "name">
+            <Router
+              namespace = "Nivel1/SubTipo"
+              filterBy  = "tipo_id" />
+          </Combobox>
+        </Row>
+        <Row>
+          <TextField
+            title      = "Nombre"
+            titleWidth = "80"
+            name       = "name"
+            width      = "auto"
+          />
+        </Row>
+        <Row>
+          <TextAreaField
+            title      = "Descripcion"
+            titleWidth = "80"
+            name       = "description"
+            width      = "auto"
+            height     = "100"
+          />
+        </Row>
+        <Row>
+          <CheckboxField
+            name    = "a_bool"
+            text    = "A Bool"
+            checked = {false}
+            widht   = "100"
+          />
+          <Empty
+            width   = "auto"
+          />
+        </Row>
+      </Form>
+    );
+
     const table1 = (
       <Table name = "table1" idKey = "niv2_id">
         <Column name = "niv2_id"   title = "Id"           width = "50"></Column>
@@ -153,15 +247,16 @@ class App extends React.Component {
             </Panel>
             <Panel
             width  = "500"
-            height = "250">
-            {form}
+            height = {this.state.mode === "view" ? 250 : 275 }>
+            {this.state.mode === "view" && form1}
+            {this.state.mode !== "view" && form2}
           </Panel>
         </div>
         <div className="app2">
           <span className="title">Ejemplo 2</span>
             <Panel
               width  = "500"
-              height = "270">
+              height = "240">
               {table1}
             </Panel>
         </div>
