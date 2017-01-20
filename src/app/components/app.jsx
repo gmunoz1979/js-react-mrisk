@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Form, Row, Combobox, TextField, TextAreaField,CheckboxField, Empty,
          Button }
                 from "../../lib/components/form";
-import { Panel, Table, Column, Router }
+import { Panel, Table, Column, Router, Message }
                 from "../../lib/components";
 
 class App extends React.Component {
@@ -12,7 +12,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      mode: "view"
+      mode: Form.ModeType.VIEW
     }
   }
 
@@ -23,13 +23,31 @@ class App extends React.Component {
     ReactDOM.render(<App></App>, app);
   }
 
-  handlerClick() {
-    this.form1.fetchById([this.field.value]);
+  handlerView() {
+    this.setState({ mode: Form.ModeType.VIEW });
+    if (this.search.isValid()) {
+      this.form.fetchById([this.field.value]);
+    } else {
+      Message.showMessage("Debe ingresar un ID");
+    }
   }
 
-  handlerChange() {
-    const new_mode = this.state.mode === "view" ? "new" : "view";
-    this.setState({"mode": new_mode});
+  handlerEdit() {
+    this.setState({ mode: Form.ModeType.EDIT });
+    if (this.search.isValid()) {
+      this.form.fetchById([this.field.value]);
+    } else {
+      Message.showMessage("Debe ingresar un ID");
+    }
+  }
+
+  handlerNew() {
+    this.form.clear();
+    this.setState({ mode: Form.ModeType.NEW });
+  }
+
+  handlerSave(json) {
+    this.form.setData(json);
   }
 
   render() {
@@ -37,46 +55,54 @@ class App extends React.Component {
       <Form
         ref           = { form => this.search = form }
         name          = "search"
-        handlerSubmit = { this.handlerClick.bind(this) }>
+        handlerSubmit = { this.handlerView.bind(this) }>
         <Row>
+          <Button
+            text         = "Nuevo"
+            width        = "auto"
+            handlerClick = { this.handlerNew.bind(this) }
+          />
           <TextField
             ref        = { field => this.field = field }
             title      = "Id"
-            titleWidth = "80"
+            titleWidth = "15"
             name       = "id"
-            width      = "250"
+            width      = "auto"
+            required   = {true}
           />
           <Button
-            text         = "Buscar"
+            text         = "Ver"
             width        = "auto"
-            handlerClick = { () => this.search.handlerSubmit() }
+            handlerClick = { this.handlerView.bind(this) }
           />
           <Button
-            text         = "Cambiar Modo"
+            text         = "Editar"
             width        = "auto"
-            handlerClick = { this.handlerChange.bind(this) }
+            handlerClick = { this.handlerEdit.bind(this) }
           />
         </Row>
       </Form>
     );
 
-    const form1 = (
+    const form = (
       <Form
-        mode      = { Form.ModeType.VIEW }
-        ref       = { form => this.form1 = form }
-        name      = "form1"
+        mode      = { this.state.mode }
+        ref       = { form => this.form = form }
+        name      = "form"
         fieldKey  = "niv1_id"
         >
         <Router
-          autoRouter = {false}
-          namespace  = "Nivel1"
+          autoRouter  = {false}
+          namespace   = "Nivel1"
+          handlerSave = { this.handlerSave.bind(this) }
         />
         <Row>
           <TextField
             title      = "Id"
             titleWidth = "80"
             name       = "niv1_id"
-            width      = "250"
+            width      = "150"
+            readOnly   = {true}
           />
           <Empty
             width      = "auto"
@@ -111,82 +137,7 @@ class App extends React.Component {
             titleWidth = "80"
             name       = "name"
             width      = "auto"
-          />
-        </Row>
-        <Row>
-          <TextAreaField
-            title      = "Descripcion"
-            titleWidth = "80"
-            name       = "description"
-            width      = "auto"
-            height     = "100"
-          />
-        </Row>
-        <Row>
-          <CheckboxField
-            name    = "a_bool"
-            text    = "A Bool"
-            checked = {false}
-            widht   = "100"
-          />
-          <Empty
-            width   = "auto"
-          />
-        </Row>
-      </Form>
-    );
-
-    const form2 = (
-      <Form
-        mode      = { Form.ModeType.NEW }
-        ref       = { form => this.form1 = form }
-        name      = "form2"
-        fieldKey  = "niv1_id"
-        >
-        <Router
-          autoRouter = {false}
-          namespace  = "Nivel1"
-        />
-        <Row>
-          <TextField
-            title      = "Id"
-            titleWidth = "80"
-            name       = "niv1_id"
-            width      = "250"
-          />
-          <Empty
-            width      = "auto"
-          />
-        </Row>
-        <Row>
-          <Combobox
-            title      = "Tipo"
-            titleWidth = "80"
-            name       = "tipo_id"
-            width      = "auto"
-            idValue    = "tipo_id"
-            textValue  = "name" >
-            <Router
-              namespace = "Nivel1/Tipo" />
-          </Combobox>
-          <Combobox
-            title      = "Sub tipo"
-            titleWidth = "80"
-            name       = "subt_id"
-            width      = "200"
-            idValue    = "subt_id"
-            textValue  = "name">
-            <Router
-              namespace = "Nivel1/SubTipo"
-              filterBy  = "tipo_id" />
-          </Combobox>
-        </Row>
-        <Row>
-          <TextField
-            title      = "Nombre"
-            titleWidth = "80"
-            name       = "name"
-            width      = "auto"
+            required   = {true}
           />
         </Row>
         <Row>
@@ -221,7 +172,7 @@ class App extends React.Component {
         <Column name = "other"     title = "Otro"         width = "auto"></Column>
           <Router
             namespace = "Nivel2"
-            filterBy  = "form1" />
+            filterBy  = "form" />
       </Table>
     );
 
@@ -240,16 +191,15 @@ class App extends React.Component {
       <div className="app container">
         <div className="app1">
           <span className="title">Ejemplo 1</span>
-            <Panel
-              width  = "500"
-              height = "40">
-              {search}
-            </Panel>
-            <Panel
+          <Panel
             width  = "500"
-            height = {this.state.mode === "view" ? 250 : 275 }>
-            {this.state.mode === "view" && form1}
-            {this.state.mode !== "view" && form2}
+            height = "40">
+            {search}
+          </Panel>
+          <Panel
+          width  = "500"
+          height = "275">
+            {form}
           </Panel>
         </div>
         <div className="app2">
