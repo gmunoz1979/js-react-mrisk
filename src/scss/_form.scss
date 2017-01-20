@@ -21,6 +21,10 @@ form {
       label + * {
         margin-left: 5px;
       }
+
+      input:invalid {
+        border: 1px solid red;
+      }
     }
 
     div + div {

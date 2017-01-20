@@ -2,6 +2,7 @@ import React    from "react";
 import Combobox from "./combobox";
 import Row      from "./row";
 import Button   from "./button";
+import Message  from "../message";
 
 const ModeType = {
   NEW:  0,
@@ -85,14 +86,22 @@ class Form extends React.Component {
     this.form.dispatchEvent(event);
   }
 
+  set form(value) {
+    value = value || {};
+    value.component = this;
+    this._form = value;
+  }
+
+  get form() {
+    return this._form;
+  }
+
   componentDidMount() {
-    this.form.component = this;
-
     this.setState({ width: this.form.clientWidth });
+  }
 
-    if (!this.props.fieldKey) {
-      return;
-    }
+  isValid() {
+    return this.form.checkValidity();
   }
 
   fetchById(filter) {
@@ -107,10 +116,21 @@ class Form extends React.Component {
   }
 
   handlerSave(e) {
+    if (!this.isValid()) {
+      Message.showMessage("Falta completar información");
+      return;
+    }
+
     let fd = new FormData(this.form);
 
     [].slice.call(this.form.querySelectorAll("input[type=checkbox]")).forEach(e => {
       fd.set(e.name, fd.has(e.name));
+    });
+
+    // Comboboxs
+    [].slice.call(this.form.querySelectorAll("select")).forEach(e => {
+      fd.append(e.component.props.idValue, fd.get(e.name));
+      fd.delete(e.name);
     });
 
     let data = {};
@@ -119,7 +139,21 @@ class Form extends React.Component {
     }
 
     const router = this.form.querySelector(".router");
-    return router.component.create(data);
+
+    if (this.props.mode === Form.ModeType.NEW) {
+      router.component.create(data).then(json => {
+        Message.showMessage("Registro creado");
+      });
+    }
+
+    if (this.props.mode === Form.ModeType.EDIT) {
+      let id = data[this.props.fieldKey];
+      delete data[this.props.fieldKey];
+
+      router.component.patch({ id: [id] }, data).then(json => {
+        Message.showMessage("Registro actualizado");
+      });
+    }
   }
 
   render() {
@@ -145,12 +179,6 @@ class Form extends React.Component {
         </Row>
       );
     }
-
-    const saveButton = (
-      <Row>
-        <Button text="Guardar" width="auto" handlerClick={this.handlerSave.bind()}></Button>
-      </Row>
-    )
 
     const width = this.state.width;
 
