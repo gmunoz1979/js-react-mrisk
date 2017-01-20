@@ -48,6 +48,9 @@ class App extends React.Component {
 
   handlerSave(json) {
     this.form.setData(json);
+    if (this.state.mode === Form.ModeType.NEW) {
+      this.setState({ mode: Form.ModeType.EDIT });
+    }
   }
 
   render() {
