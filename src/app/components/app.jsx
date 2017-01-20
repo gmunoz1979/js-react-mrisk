@@ -24,8 +24,8 @@ class App extends React.Component {
   }
 
   handlerView() {
-    this.setState({ mode: Form.ModeType.VIEW });
     if (this.search.isValid()) {
+      this.setState({ mode: Form.ModeType.VIEW });
       this.form.fetchById([this.field.value]);
     } else {
       Message.showMessage("Debe ingresar un ID");
@@ -33,8 +33,8 @@ class App extends React.Component {
   }
 
   handlerEdit() {
-    this.setState({ mode: Form.ModeType.EDIT });
     if (this.search.isValid()) {
+      this.setState({ mode: Form.ModeType.EDIT });
       this.form.fetchById([this.field.value]);
     } else {
       Message.showMessage("Debe ingresar un ID");
