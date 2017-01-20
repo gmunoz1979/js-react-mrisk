@@ -88,7 +88,8 @@ class Combobox extends Field {
         style    = { style }
         name     = { this.props.name }
         ref      = { field => this.field = field }
-        onChange = { this.handlerChange.bind(this) } >
+        onChange = { this.handlerChange.bind(this) }
+        required = { this.required } >
         { values.map((o, i) => {
           return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
         }) }
@@ -107,8 +108,8 @@ class Combobox extends Field {
 
     const field = (
       <div>
-        { this.props.mode === Form.ModeType.VIEW && input  }
-        { this.props.mode !== Form.ModeType.VIEW && select }
+        { (this.props.mode === Form.ModeType.VIEW ||  this.props.readOnly) && input  }
+        { (this.props.mode !== Form.ModeType.VIEW && !this.props.readOnly) && select }
         { router && router }
       </div>
     );

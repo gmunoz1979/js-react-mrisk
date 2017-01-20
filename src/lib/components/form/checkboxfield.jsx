@@ -11,7 +11,8 @@ class CheckboxField extends Field {
           type = "checkbox"
           name = { this.props.name }
           ref  = { field => this.field = field }
-          disabled = { this.props.mode === Form.ModeType.VIEW } />
+          disabled = { this.props.mode === Form.ModeType.VIEW || this.props.readOnly }
+          required = { this.props.required } />
         <label>
           {this.props.text}
         </label>
