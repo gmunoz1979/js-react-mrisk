@@ -23,6 +23,10 @@ class Form extends React.Component {
     return ModeType;
   }
 
+  clear() {
+    this.form.reset();
+  }
+
   getFields(json) {
     let fields = {};
 
