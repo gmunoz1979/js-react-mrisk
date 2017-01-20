@@ -10,6 +10,9 @@ class Router extends React.Component {
     this.state = {
       json: []
     }
+
+    this._isMonted = false;
+    this._isFirst  = true;
   }
 
   updateValues() {
@@ -64,6 +67,54 @@ class Router extends React.Component {
     this.setState({ json: [] });
   }
 
+  handlerError(response) {
+    if (!this.props.showMessageError) {
+      throw new Error(response);
+      return;
+    }
+
+    let message = `Error ${response.status} - `;
+    let handlerClick = null;
+
+    if (response.status === 401) {
+      message += "Sin autorización";
+      handlerClick = () => window.location.href = Config.Redirect;
+    }
+
+    if (response.status === 404) {
+      message += "No existe registro";
+    }
+
+    if (response.status === 500) {
+      const reader = response.body.getReader();
+      let buffer = new Uint8Array(0);
+      let self = this;
+
+      reader.read().then(function processResult(result) {
+        if (result.done) {
+          const json = JSON.parse(new TextDecoder("utf-8").decode(buffer));
+          self.props.handlerError(json);
+          Message.showMessage(json.message, handlerClick);
+          return;
+        }
+
+        let tmp = new Uint8Array(buffer.byteLength + result.value.byteLength);
+        tmp.set(buffer, 0);
+        tmp.set(result.value, buffer.byteLength);
+        buffer = tmp;
+
+        return reader.read().then(processResult);
+      });
+
+      return;
+    }
+
+    this.props.handlerError(response);
+    Message.showMessage(message, handlerClick);
+
+    throw new Error(response);
+  }
+
   async create(data) {
     let url = this.getUrl("create");
 
@@ -73,6 +124,36 @@ class Router extends React.Component {
         headers: this.getHeaders(),
         body: JSON.stringify(data)
       });
+
+      if (response.ok) {
+        let json = await response.json();
+        this.props.handlerSave(json);
+        return json;
+      }
+
+      this.handlerError(response);
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async patch(params, data) {
+    let url = this.getUrl("patchById") + "?options=" + JSON.stringify(params).replace(/(\"|\'|\s)/g, "");
+
+    try {
+      let response = await fetch(url, {
+        method:  "POST",
+        headers: this.getHeaders(),
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        let json = await response.json();
+        this.props.handlerSave(json);
+        return json;
+      }
+
+      this.handlerError(response);
     } catch(err) {
       throw err;
     }
@@ -119,60 +200,28 @@ class Router extends React.Component {
         return json;
       }
 
-      if (this.props.showMessageError) {
-        let message = `Error ${response.status} - `;
-        let handlerClick = null;
-
-        if (response.status === 401) {
-          message += "Sin autorización";
-          handlerClick = () => window.location.href = Config.Redirect;
-        }
-
-        if (response.status === 404) {
-          message += "No existe registro";
-        }
-
-        if (response.status === 500) {
-          const reader = response.body.getReader();
-          let buffer = new Uint8Array(0);
-          let self = this;
-          reader.read().then(function processResult(result) {
-
-            if (result.done) {
-              const json = JSON.parse(new TextDecoder("utf-8").decode(buffer));
-              self.props.handlerError(json);
-              Message.showMessage(json.message, handlerClick);
-              return;
-            }
-
-            let tmp = new Uint8Array(buffer.byteLength + result.value.byteLength);
-            tmp.set(buffer, 0);
-            tmp.set(result.value, buffer.byteLength);
-            buffer = tmp;
-
-            return reader.read().then(processResult);
-          });
-
-          return;
-        }
-
-        this.props.handlerError(response);
-        Message.showMessage(message, handlerClick);
-      }
-
-      throw new Error(response);
+      this.handlerError(response);
     } catch(err) {
       throw err;
     }
   }
 
-  componentDidMount() {
-    this.target.component = this;
+  set target(value) {
+    value = value || {};
+    value.component = this;
+    this._target = value;
+  }
 
+  get target() {
+    return this._target;
+  }
+
+  get_options() {
     const get_all = !this.props.filterBy && !this.props.objectParent && !this.props.findBy;
 
     if (this.props.autoRouter && get_all) {
-      this.getData().then(json => this.setState({ json: json }));
+      this.getData().then(json => this.setState({json: json}));
+      this._isFirst = false;
       return;
     }
 
@@ -204,7 +253,16 @@ class Router extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.get_options();
+    this._isMonted = true;
+  }
+
   render() {
+    if (this._isMonted && this._isFirst) {
+      this.get_options();
+    }
+
     return (
       <div className="router" ref = { target => this.target = target }>
         {
@@ -236,7 +294,8 @@ Router.defaultProps = {
   action:           function() {},
   actionError:      function() {},
   handlerAction:    function() {},
-  handlerError:     function() {}
+  handlerError:     function() {},
+  handlerSave:      function() {}
 };
 
 export default Router;
