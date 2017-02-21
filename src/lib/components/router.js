@@ -265,7 +265,8 @@ class Router extends React.Component {
       return;
     }
 
-    if (this.props.filterBy) {
+    if (this.props.filterBy && !object.has_update_event) {
+      object.has_update_event = true;
       object.addEventListener("update", e =>
         {
           let target = e.target;
@@ -281,9 +282,7 @@ class Router extends React.Component {
   }
 
   render() {
-    if (this._isMonted && this._isFirst) {
-      this.get_options();
-    }
+    this._isMonted && this._isFirst && this.get_options();
 
     return (
       <div className="router" ref = { target => this.target = target }>
