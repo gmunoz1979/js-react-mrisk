@@ -3,8 +3,14 @@ import ReactDOM from "react-dom";
 
 class Message extends React.Component {
 
+  static defaultProps = {
+    width:        250,
+    height:       100,
+    handlerClick: null
+  }
+
   static createParent() {
-    let c = document.createElement("div");
+    const c = document.createElement("div");
     c.classList.add("window-modal");
     c.style.width  = document.body.clientWidth  + "px";
     c.style.height = document.body.clientHeight + "px";
@@ -28,7 +34,7 @@ class Message extends React.Component {
   }
 
   componentDidMount() {
-    let parent = this.target.parentNode;
+    const parent = this.target.parentNode;
     const cw = (parent.clientWidth/2)  - (this.target.clientWidth/2);
     const ch = (parent.clientHeight/2) - (this.props.height/2);
 
@@ -51,11 +57,5 @@ class Message extends React.Component {
     );
   }
 }
-
-Message.defaultProps = {
-  width:        250,
-  height:       100,
-  handlerClick: null
-};
 
 export default Message;
