@@ -2,6 +2,10 @@ import React  from "react";
 
 class Button extends React.Component {
 
+  static defaultProps = {
+    handlerClick: function() {}
+  }
+
   render() {
     const style = { width: this.props.width + "px" };
 
@@ -18,10 +22,6 @@ class Button extends React.Component {
       </div>
     );
   }
-}
-
-Button.defaultProps = {
-  handlerClick: function() {}
 }
 
 export default Button;
