@@ -4,24 +4,21 @@ import Row      from "./row";
 import Button   from "./button";
 import Message  from "../message";
 
-const ModeType = {
-  NEW:  0,
-  EDIT: 1,
-  VIEW: 2
-}
-
 class Form extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      width: 0
-    }
+  static ModeType = {
+    NEW:  0,
+    EDIT: 1,
+    VIEW: 2
   }
 
-  static get ModeType() {
-    return ModeType;
+  static defaultProps = {
+    mode:          Form.ModeType.NEW,
+    handlerSubmit: function() {}
+  };
+
+  state = {
+    width: 0
   }
 
   clear() {
@@ -197,10 +194,5 @@ class Form extends React.Component {
     );
   }
 }
-
-Form.defaultProps = {
-  mode:          Form.ModeType.NEW,
-  handlerSubmit: function() {}
-};
 
 export default Form;
