@@ -3,18 +3,14 @@ import Config from "../config";
 
 class Table extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      head:  [],
-      child: [],
-      json:  []
-    }
+  state = {
+    head:  [],
+    child: [],
+    json:  []
   }
 
   onrowclick(row, index, e) {
-    let event = new CustomEvent("select",
+    const event = new CustomEvent("select",
       {
         detail: {
           id:    this.props.idKey,
