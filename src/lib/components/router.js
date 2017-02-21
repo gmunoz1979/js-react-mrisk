@@ -4,16 +4,38 @@ import Config  from "../config";
 
 class Router extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      json: []
-    }
-
-    this._isMonted = false;
-    this._isFirst  = true;
+  static propTypes = {
+    autoRouter:       React.PropTypes.bool,
+    method:           React.PropTypes.string,
+    showMessageError: React.PropTypes.bool,
+    filterBy:         React.PropTypes.string,
+    objectParent:     React.PropTypes.string,
+    action:           React.PropTypes.func,
+    actionError:      React.PropTypes.func,
+    handlerAction:    React.PropTypes.func,
+    handlerError:     React.PropTypes.func
   }
+
+  static defaultProps = {
+    autoRouter:       true,
+    method:           "GET",
+    showMessageError: true,
+    filterBy:         null,
+    objectParent:     null,
+    action:           function() {},
+    actionError:      function() {},
+    handlerAction:    function() {},
+    handlerError:     function() {},
+    handlerSave:      function() {}
+  }
+
+  state = {
+    json: []
+  }
+
+  _isMonted = false
+
+  _isFirst  = true
 
   updateValues() {
     throw new Error("No implementado.");
@@ -272,30 +294,5 @@ class Router extends React.Component {
     );
   }
 }
-
-Router.propTypes = {
-  autoRouter:       React.PropTypes.bool,
-  method:           React.PropTypes.string,
-  showMessageError: React.PropTypes.bool,
-  filterBy:         React.PropTypes.string,
-  objectParent:     React.PropTypes.string,
-  action:           React.PropTypes.func,
-  actionError:      React.PropTypes.func,
-  handlerAction:    React.PropTypes.func,
-  handlerError:     React.PropTypes.func
-}
-
-Router.defaultProps = {
-  autoRouter:       true,
-  method:           "GET",
-  showMessageError: true,
-  filterBy:         null,
-  objectParent:     null,
-  action:           function() {},
-  actionError:      function() {},
-  handlerAction:    function() {},
-  handlerError:     function() {},
-  handlerSave:      function() {}
-};
 
 export default Router;
