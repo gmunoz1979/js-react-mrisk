@@ -39,7 +39,7 @@ class Form extends React.Component {
     return fields;
   }
 
-  get idValue() {
+  get isValue() {
     return !this.json ? null : this.json[this.props.fieldKey];
   }
 
@@ -97,7 +97,7 @@ class Form extends React.Component {
     this.setState({ width: this.form.clientWidth });
   }
 
-  isValid() {
+  get isValid() {
     return this.form.checkValidity();
   }
 
@@ -113,7 +113,7 @@ class Form extends React.Component {
   }
 
   handlerSave(e) {
-    if (!this.isValid()) {
+    if (!this.isValid) {
       Message.showMessage("Falta completar información");
       return;
     }
