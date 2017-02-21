@@ -1,19 +1,26 @@
 import React    from "react";
 import ReactDOM from "react-dom";
-import { Form, Row, Combobox, TextField, TextAreaField,CheckboxField, Empty,
-         Button }
-                from "../../lib/components/form";
-import { Panel, Table, Column, Router, Message }
-                from "../../lib/components";
+import * as Lib from "../../lib/components";
+
+const Router  = Lib.Router;
+const Table   = Lib.Table;
+const Column  = Lib.Column;
+const Panel   = Lib.Panel;
+const Message = Lib.Message;
+
+const Form          = Lib.Form.Form;
+const Row           = Lib.Form.Row;
+const Button        = Lib.Form.Button;
+const TextField     = Lib.Form.TextField;
+const Empty         = Lib.Form.Empty;
+const Combobox      = Lib.Form.Combobox;
+const TextAreaField = Lib.Form.TextAreaField;
+const CheckboxField = Lib.Form.CheckboxField;
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      mode: Form.ModeType.VIEW
-    }
+  state = {
+    mode: Form.ModeType.VIEW
   }
 
   static create() {
@@ -24,21 +31,23 @@ class App extends React.Component {
   }
 
   handlerView() {
-    if (this.search.isValid()) {
-      this.setState({ mode: Form.ModeType.VIEW });
-      this.form.fetchById([this.field.value]);
-    } else {
+    if (!this.search.isValid) {
       Message.showMessage("Debe ingresar un ID");
+      return;
     }
+
+    this.setState({ mode: Form.ModeType.VIEW });
+    this.form.fetchById([this.field.value]);
   }
 
   handlerEdit() {
-    if (this.search.isValid()) {
-      this.setState({ mode: Form.ModeType.EDIT });
-      this.form.fetchById([this.field.value]);
-    } else {
+    if (!this.search.isValid) {
       Message.showMessage("Debe ingresar un ID");
+      return;
     }
+
+    this.setState({ mode: Form.ModeType.EDIT });
+    this.form.fetchById([this.field.value]);
   }
 
   handlerNew() {
