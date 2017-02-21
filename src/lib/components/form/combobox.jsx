@@ -4,9 +4,8 @@ import Form  from "./form";
 
 class Combobox extends Field {
 
-  constructor(props) {
-    super(props);
-    this.state = { json: [] };
+  state = {
+    json: []
   }
 
   insertDefault(values) {
@@ -56,7 +55,7 @@ class Combobox extends Field {
   }
 
   handlerChange(e) {
-    let event = new CustomEvent("update",
+    const event = new CustomEvent("update",
       {
         detail: {}
       }
@@ -66,7 +65,7 @@ class Combobox extends Field {
   }
 
   render() {
-    let router =  null;
+    let router = null;
 
     React.Children.map(this.props.children, (c) => {
       if (c.type.name === "Router") {
