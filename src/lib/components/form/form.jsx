@@ -3,6 +3,7 @@ import Combobox from "./combobox";
 import Row      from "./row";
 import Button   from "./button";
 import Message  from "../message";
+import Util     from "../../util";
 
 class Form extends React.Component {
 
@@ -43,18 +44,8 @@ class Form extends React.Component {
     return !this.json ? null : this.json[this.props.fieldKey];
   }
 
-  isArray(o) {
-    const types = 'Array Object String Date Function Boolean Number Null Undefined'.split(' ');
-
-    const type = function() {
-      return Object.prototype.toString.call(this).slice(8, -1);
-    }
-
-    return types[0] === type.call(o);
-  }
-
   setData(json={}) {
-    json = this.isArray(json) ? json[0] : json;
+    json = Util.isArray(json) ? json[0] : json;
 
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
