@@ -1,8 +1,5 @@
 import React    from "react";
 import Combobox from "./combobox";
-import Row      from "./row";
-import Button   from "./button";
-import Message  from "../message";
 import Util     from "../../util";
 
 class Form extends React.Component {
@@ -19,7 +16,8 @@ class Form extends React.Component {
   };
 
   state = {
-    width: 0
+    width: 0,
+    mode:  null
   }
 
   clear() {
@@ -84,6 +82,10 @@ class Form extends React.Component {
     return this._form;
   }
 
+  componentWillMount() {
+    this.setState({ mode: this.props.mode });
+  }
+
   componentDidMount() {
     this.setState({ width: this.form.clientWidth });
   }
@@ -92,94 +94,25 @@ class Form extends React.Component {
     return this.form.checkValidity();
   }
 
-  fetchById(filter) {
-    const router = this.form.querySelector(".router");
-    return router.component.fetchById(filter);
-  }
-
   handlerSubmit(e) {
     this.props.handlerSubmit(e);
     e && e.preventDefault();
     return false;
   }
 
-  handlerSave(e) {
-    if (!this.isValid) {
-      Message.showMessage("Falta completar información");
-      return;
-    }
-
-    let fd = new FormData(this.form);
-
-    [].slice.call(this.form.querySelectorAll("input[type=checkbox]")).forEach(e => {
-      fd.set(e.name, fd.has(e.name));
-    });
-
-    // Comboboxs
-    [].slice.call(this.form.querySelectorAll("select")).forEach(e => {
-      fd.append(e.component.props.idValue, fd.get(e.name));
-      fd.delete(e.name);
-    });
-
-    let data = {};
-    for (let [k, v] of fd.entries()) {
-      data[k] = v;
-    }
-
-    const router = this.form.querySelector(".router");
-
-    if (this.props.mode === Form.ModeType.NEW) {
-      router.component.create(data).then(json => {
-        Message.showMessage("Registro creado");
-      });
-    }
-
-    if (this.props.mode === Form.ModeType.EDIT) {
-      let id = data[this.props.fieldKey];
-      delete data[this.props.fieldKey];
-
-      router.component.patch({ id: [id] }, data).then(json => {
-        Message.showMessage("Registro actualizado");
-      });
-    }
-  }
-
-  render() {
-    let hasRouter = false;
-
-    let children = React.Children.map(this.props.children, (c) => {
-      if (c.type.name === "Router") {
-        hasRouter = true;
-        return React.cloneElement(c, { handlerAction: this.setData.bind(this) });
-      }
-
-      return c;
-    });
-
-    if (hasRouter && this.props.mode !== Form.ModeType.VIEW) {
-      children.push(
-        <Row>
-          <Button
-            text         = "Guardar"
-            width        = "auto"
-            handlerClick = { this.handlerSave.bind(this) }
-            />
-        </Row>
-      );
-    }
-
+  render(children=this.props.children) {
     const width = this.state.width;
 
     return (
       <form autoComplete="off"
-        name = { this.props.name }
-        ref  = { form => this.form = form }
+        name     = { this.props.name }
+        ref      = { form => this.form = form }
         onSubmit = { this.handlerSubmit.bind(this) }
       >
         { React.Children.map(children, c => React.cloneElement(c,
           {
-            width: width ,
-            mode:  this.props.mode
+            width: width,
+            mode:  this.state.mode
           })) }
       </form>
     );
