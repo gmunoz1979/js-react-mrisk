@@ -20,7 +20,7 @@ class FetchableForm extends Form {
 
     children.unshift(
       <Router
-        autoRouter    = { false }
+        autoLoad      = { false }
         namespace     = { this.props.namespace }
         handlerAction = { this.setData.bind(this) }
       />

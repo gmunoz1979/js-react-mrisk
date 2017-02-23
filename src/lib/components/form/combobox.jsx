@@ -71,7 +71,7 @@ class Combobox extends Field {
       if (c.type.name === "Router") {
         let props = {
           handlerAction: this.handlerAction.bind(this),
-          autoRouter:    this.props.mode !== Form.ModeType.VIEW
+          autoLoad:      this.props.mode !== Form.ModeType.VIEW
         };
 
         router = React.cloneElement(c, props);

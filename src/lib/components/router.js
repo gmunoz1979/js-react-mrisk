@@ -5,7 +5,7 @@ import Config  from "../config";
 class Router extends React.Component {
 
   static propTypes = {
-    autoRouter:       React.PropTypes.bool,
+    autoLoad:         React.PropTypes.bool,
     method:           React.PropTypes.string,
     showMessageError: React.PropTypes.bool,
     filterBy:         React.PropTypes.string,
@@ -17,7 +17,7 @@ class Router extends React.Component {
   }
 
   static defaultProps = {
-    autoRouter:       true,
+    autoLoad:       true,
     method:           "GET",
     showMessageError: true,
     filterBy:         null,
@@ -241,7 +241,7 @@ class Router extends React.Component {
   get_options() {
     const get_all = !this.props.filterBy && !this.props.objectParent && !this.props.findBy;
 
-    if (this.props.autoRouter && get_all) {
+    if (this.props.autoLoad && get_all) {
       this.getData().then(json => this.setState({json: json}));
       this._isFirst = false;
       return;
