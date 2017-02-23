@@ -64,11 +64,11 @@ class Table extends React.Component {
 
   render() {
     let columns = [];
-    let router;
+    let namespace;
 
     React.Children.map(this.state.children, c => {
-      if (c.type.name === "Router") {
-        router = React.cloneElement(c, { handlerAction: this.setData.bind(this) });
+      if (c.type.name === "Namespace") {
+        namespace = React.cloneElement(c, { handlerAction: this.setData.bind(this) });
         return;
       }
 
@@ -103,7 +103,7 @@ class Table extends React.Component {
             }
           </tbody>
         </table>
-        { router && router }
+        { namespace && namespace }
       </div>
     );
   }

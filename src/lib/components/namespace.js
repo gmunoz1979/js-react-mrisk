@@ -2,7 +2,7 @@ import React   from "react";
 import Message from "./message";
 import Config  from "../config";
 
-class Router extends React.Component {
+class Namespace extends React.Component {
 
   static propTypes = {
     autoLoad:         React.PropTypes.bool,
@@ -48,7 +48,7 @@ class Router extends React.Component {
   }
 
   getUrl(function_name = this.function_name) {
-    return `${Config.Url}/${Config.Context}/${Config.Handler}/${this.props.namespace}/${function_name}.json`;
+    return `${Config.Url}/${Config.Context}/${Config.Handler}/${this.props.path}/${function_name}.json`;
   }
 
   hasValue(o) {
@@ -285,7 +285,7 @@ class Router extends React.Component {
     this._isMonted && this._isFirst && this.get_options();
 
     return (
-      <div className="router" ref = { target => this.target = target }>
+      <div className="namespace" ref = { target => this.target = target }>
         {
           React.Children.map(this.props.children, c => React.cloneElement(c, { json: this.state.json }))
         }
@@ -294,4 +294,4 @@ class Router extends React.Component {
   }
 }
 
-export default Router;
+export default Namespace;

@@ -28,13 +28,13 @@ class Combobox extends Field {
 
     field.value = json[path];
 
-    const router = field.parentNode.querySelector(".router");
+    const namespace = field.parentNode.querySelector(".namespace");
 
-    if (!router || !router.component.props.filterBy) {
+    if (!namespace || !namespace.component.props.filterBy) {
       return;
     }
 
-    const cbx        = form.querySelector(`*[name=${router.component.props.filterBy}]`);
+    const cbx        = form.querySelector(`*[name=${namespace.component.props.filterBy}]`);
     const cbx_isView = cbx.classList.contains("combobox");
     const cbx_p      = cbx.component.props;
     const cbx_path   = `${p.name}.${cbx_p.name}.${cbx_isView ? cbx_p.textValue : cbx_p.idValue}`
@@ -42,8 +42,8 @@ class Combobox extends Field {
     cbx.value = json[cbx_path];
 
     if (!cbx_isView) {
-      let data = await router.component.getData({ id: [cbx.value] })
-      router.component.setState({ json: data });
+      let data = await namespace.component.getData({ id: [cbx.value] })
+      namespace.component.setState({ json: data });
 
       field.value = json[path];
     }
@@ -65,16 +65,16 @@ class Combobox extends Field {
   }
 
   render() {
-    let router = null;
+    let namespace = null;
 
     React.Children.map(this.props.children, (c) => {
-      if (c.type.name === "Router") {
+      if (c.type.name === "Namespace") {
         let props = {
           handlerAction: this.handlerAction.bind(this),
           autoLoad:      this.props.mode !== Form.ModeType.VIEW
         };
 
-        router = React.cloneElement(c, props);
+        namespace = React.cloneElement(c, props);
       }
     });
 
@@ -108,7 +108,7 @@ class Combobox extends Field {
       <div>
         { (this.props.mode === Form.ModeType.VIEW ||  this.props.readOnly) && input  }
         { (this.props.mode !== Form.ModeType.VIEW && !this.props.readOnly) && select }
-        { router && router }
+        { namespace && namespace }
       </div>
     );
 

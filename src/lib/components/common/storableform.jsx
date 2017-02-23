@@ -31,10 +31,10 @@ class StorableForm extends FetchableForm {
       data[k] = v;
     }
 
-    const router = Util.findReact(this.form.querySelector(".router"));
+    const namespace = Util.findReact(this.form.querySelector(".namespace"));
 
     if (this.state.mode === Form.ModeType.NEW) {
-      router.create(data).then(json => {
+      namespace.create(data).then(json => {
         Message.showMessage("Registro creado");
       });
     }
@@ -43,7 +43,7 @@ class StorableForm extends FetchableForm {
       let id = data[this.props.fieldKey];
       delete data[this.props.fieldKey];
 
-      router.patch({ id: [id] }, data).then(json => {
+      namespace.patch({ id: [id] }, data).then(json => {
         Message.showMessage("Registro actualizado");
       });
     }

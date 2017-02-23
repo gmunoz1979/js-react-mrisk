@@ -2,12 +2,12 @@ import React    from "react";
 import ReactDOM from "react-dom";
 import * as Lib from "../../lib/components";
 
-const Router   = Lib.Router;
-const Table    = Lib.Table;
-const Column   = Lib.Column;
-const Panel    = Lib.Panel;
-const Message  = Lib.Message;
-const Relation = Lib.Relation;
+const Namespace = Lib.Namespace;
+const Table     = Lib.Table;
+const Column    = Lib.Column;
+const Panel     = Lib.Panel;
+const Message   = Lib.Message;
+const Relation  = Lib.Relation;
 
 const Form          = Lib.Form.Form;
 const Row           = Lib.Form.Row;
@@ -57,8 +57,8 @@ class App extends React.Component {
             width      = "auto"
             name       = "sub_tipo.tipo_id"
             textValue  = "sub_tipo.tipo.name" >
-            <Router
-              namespace = "Nivel1/Tipo" />
+            <Namespace
+              path = "Nivel1/Tipo" />
           </Combobox>
           <Combobox
             title      = "Sub tipo"
@@ -67,8 +67,8 @@ class App extends React.Component {
             name       = "subt_id"
             textValue  = "sub_tipo.name">
             <Relation with = "sub_tipo.tipo_id" />
-            <Router
-              namespace = "Nivel1/SubTipo" />
+            <Namespace
+              path = "Nivel1/SubTipo" />
           </Combobox>
         </Row>
         <Row>

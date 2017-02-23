@@ -1,7 +1,7 @@
-import React  from "react";
-import Form   from "../form/form";
-import Router from "../router";
-import Util   from "../../util";
+import React     from "react";
+import Form      from "../form/form";
+import Namespace from "../namespace";
+import Util      from "../../util";
 
 class FetchableForm extends Form {
 
@@ -11,17 +11,17 @@ class FetchableForm extends Form {
   };
 
   fetchById(filter) {
-    const router = Util.findReact(this.form.querySelector(".router"));
-    return router.fetchById(filter);
+    const namespace = Util.findReact(this.form.querySelector(".namespace"));
+    return namespace.fetchById(filter);
   }
 
   render(children=this.props.children) {
     children = React.Children.toArray(children);
 
     children.unshift(
-      <Router
+      <Namespace
         autoLoad      = { false }
-        namespace     = { this.props.namespace }
+        path          = { this.props.namespace }
         handlerAction = { this.setData.bind(this) }
       />
     );
