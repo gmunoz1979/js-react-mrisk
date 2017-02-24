@@ -9,18 +9,17 @@ class Relation extends React.Component {
     const formTo   = Util.findReact(this.target.closest("form"));
     const formWith = app.querySelector(`*[name=${this.props.with}]`);
 
+    console.debug(typeof(formWith));
+
     formWith.addEventListener("new", e => {
       formTo.clear();
-      formTo.setState({ mode: Form.ModeType.NEW });
     });
 
     formWith.addEventListener("edit", e => {
-      formTo.setState({ mode: Form.ModeType.EDIT });
       formTo.fetchById([e.detail.id]);
     });
 
     formWith.addEventListener("view", e => {
-      formTo.setState({ mode: Form.ModeType.VIEW });
       formTo.fetchById([e.detail.id]);
     });
   }
