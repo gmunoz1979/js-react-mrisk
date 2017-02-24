@@ -57,8 +57,9 @@ class App extends React.Component {
             title      = "Tipo"
             titleWidth = "80"
             width      = "auto"
-            name       = "sub_tipo.tipo_id"
-            textValue  = "sub_tipo.tipo.name" >
+            name       = "tipo_id"
+            idValue    = "tipo_id"
+            textValue  = "name" >
             <Namespace
               path = "Nivel1/Tipo" />
           </Combobox>
@@ -67,7 +68,8 @@ class App extends React.Component {
             titleWidth = "80"
             width      = "200"
             name       = "subt_id"
-            textValue  = "sub_tipo.name">
+            idValue    = "subt_id"
+            textValue  = "name">
             <Relation with = "sub_tipo.tipo_id" />
             <Namespace
               path = "Nivel1/SubTipo" />
