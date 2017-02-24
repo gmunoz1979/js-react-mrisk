@@ -33,35 +33,34 @@ class StorableForm extends FetchableForm {
 
     const namespace = Util.findReact(this.form.querySelector(".namespace"));
 
-    if (this.state.mode === Form.ModeType.NEW) {
-      namespace.create(data).then(json => {
-        Message.showMessage("Registro creado");
-      });
-    }
-
-    if (this.state.mode === Form.ModeType.EDIT) {
-      let id = data[this.props.fieldKey];
-      delete data[this.props.fieldKey];
-
-      namespace.patch({ id: [id] }, data).then(json => {
-        Message.showMessage("Registro actualizado");
-      });
-    }
+  //   if (this.state.mode === Form.ModeType.NEW) {
+  //     namespace.create(data).then(json => {
+  //       Message.showMessage("Registro creado");
+  //     });
+  //   }
+  //
+  //   if (this.state.mode === Form.ModeType.EDIT) {
+  //     let id = data[this.props.fieldKey];
+  //     delete data[this.props.fieldKey];
+  //
+  //     namespace.patch({ id: [id] }, data).then(json => {
+  //       Message.showMessage("Registro actualizado");
+  //     });
+  //   }
   }
 
   render(children=this.props.children) {
     children = React.Children.toArray(children);
 
-    this.state.mode !== Form.ModeType.VIEW &&
-      children.push(
-        <Row>
-          <Button
-            text         = "Guardar"
-            width        = "auto"
-            handlerClick = { this.handlerSave.bind(this) }
-            />
-        </Row>
-      );
+    children.push(
+      <Row>
+        <Button
+          text         = "Guardar"
+          width        = "auto"
+          handlerClick = { this.handlerSave.bind(this) }
+          />
+      </Row>
+    );
 
     return super.render(children);
   }

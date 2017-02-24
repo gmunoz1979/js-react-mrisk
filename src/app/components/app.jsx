@@ -10,6 +10,7 @@ const Message   = Lib.Message;
 const Relation  = Lib.Relation;
 
 const Form          = Lib.Form.Form;
+const ModeForm      = Lib.Form.ModeForm;
 const Row           = Lib.Form.Row;
 const Button        = Lib.Form.Button;
 const TextField     = Lib.Form.TextField;
@@ -40,6 +41,7 @@ class App extends React.Component {
         name      = "form"
         namespace = "Nivel1"
       >
+        <ModeForm mode= {ModeForm.VIEW} />
         <Relation with = "search" />
         <Row>
           <TextField

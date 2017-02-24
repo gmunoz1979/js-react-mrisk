@@ -15,7 +15,6 @@ class TextAreaField extends Field {
         style    = { style }
         name     = { this.props.name }
         ref      = { field => this.field = field }
-        readOnly = { this.props.mode === Form.ModeType.VIEW || this.props.readOnly }
         required = { this.props.required } ></textarea>
     );
 

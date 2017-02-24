@@ -4,21 +4,11 @@ import Util     from "../../util";
 
 class Form extends React.Component {
 
-  static ModeType = {
-    NEW:  0,
-    EDIT: 1,
-    VIEW: 2
-  }
-
   static defaultProps = {
-    mode:          Form.ModeType.NEW,
     handlerSubmit: function() {}
-  };
-
-  state = {
-    width: 0,
-    mode:  null
   }
+
+  state = { width: 0 }
 
   clear() {
     this.form.reset();
@@ -42,20 +32,16 @@ class Form extends React.Component {
     return !this.json ? null : this.json[this.props.fieldKey];
   }
 
+  launchEvent() {
+    let event = new CustomEvent("update", { detail: {} });
+    this.form.dispatchEvent(event);
+  }
+
   setData(json={}) {
     json = Util.isArray(json) ? json[0] : json;
 
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
-        if (field.nodeName === "SELECT" || field.classList.contains("combobox")) {
-          Combobox.updateCombobox(k, json, field, this.form);
-          continue;
-        }
-        if (field.type === "checkbox") {
-          field.checked = json[k];
-          continue;
-        }
-
         field.value = json[k];
       }
     }
@@ -63,13 +49,7 @@ class Form extends React.Component {
     this.json = json;
     this.form.value = this.idValue;
 
-    let event = new CustomEvent("update",
-      {
-        detail: {}
-      }
-    );
-
-    this.form.dispatchEvent(event);
+    this.launchEvent("update");
   }
 
   set form(value) {
@@ -111,8 +91,7 @@ class Form extends React.Component {
       >
         { React.Children.map(children, c => React.cloneElement(c,
           {
-            width: width,
-            mode:  this.state.mode
+            width: width
           })) }
       </form>
     );

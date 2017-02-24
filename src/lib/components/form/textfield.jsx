@@ -13,7 +13,7 @@ class TextField extends Field {
         type     = "text"
         name     = { this.props.name }
         ref      = { field => this.field = field }
-        readOnly = { this.props.mode === Form.ModeType.VIEW || this.props.readOnly }
+        readOnly = { this.props.readOnly }
         required = { this.props.required } />
     );
 

@@ -70,44 +70,28 @@ class Combobox extends Field {
     React.Children.map(this.props.children, (c) => {
       if (c.type.name === "Namespace") {
         let props = {
-          handlerAction: this.handlerAction.bind(this),
-          autoLoad:      this.props.mode !== Form.ModeType.VIEW
+          handlerAction: this.handlerAction.bind(this)
         };
 
         namespace = React.cloneElement(c, props);
       }
     });
 
-    const style  = {width: (this.props.width - this.props.titleWidth - 5) + "px"};
+    const style  = { width: (this.props.width - this.props.titleWidth - 5) + "px" };
     const values = this.insertDefault(this.state.json);
-
-    const select = (
-      <select
-        style    = { style }
-        name     = { this.props.name }
-        ref      = { field => this.field = field }
-        onChange = { this.handlerChange.bind(this) }
-        required = { this.required } >
-        { values.map((o, i) => {
-          return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
-        }) }
-      </select>
-    );
-
-    const input = (
-      <input
-        type      = "text"
-        className = "combobox"
-        style     = { style }
-        name      = { this.props.name }
-        ref       = { field => this.field = field }
-        readOnly  = { true } />
-    );
 
     const field = (
       <div>
-        { (this.props.mode === Form.ModeType.VIEW ||  this.props.readOnly) && input  }
-        { (this.props.mode !== Form.ModeType.VIEW && !this.props.readOnly) && select }
+        <select
+          style    = { style }
+          name     = { this.props.name }
+          ref      = { field => this.field = field }
+          onChange = { this.handlerChange.bind(this) }
+          required = { this.required } >
+          { values.map((o, i) => {
+            return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
+          }) }
+        </select>
         { namespace && namespace }
       </div>
     );
