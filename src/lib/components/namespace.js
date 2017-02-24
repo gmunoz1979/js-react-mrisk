@@ -8,8 +8,9 @@ class Namespace extends React.Component {
     autoLoad:         React.PropTypes.bool,
     method:           React.PropTypes.string,
     showMessageError: React.PropTypes.bool,
-    filterBy:         React.PropTypes.string,
-    objectParent:     React.PropTypes.string,
+    //filterBy:         React.PropTypes.string,
+    //objectParent:     React.PropTypes.string,
+    hasRelation:      React.PropTypes.bool,
     action:           React.PropTypes.func,
     actionError:      React.PropTypes.func,
     handlerAction:    React.PropTypes.func,
@@ -20,8 +21,9 @@ class Namespace extends React.Component {
     autoLoad:       true,
     method:           "GET",
     showMessageError: true,
-    filterBy:         null,
-    objectParent:     null,
+    //filterBy:         null,
+    //objectParent:     null,
+    hasRelation:      false,
     action:           function() {},
     actionError:      function() {},
     handlerAction:    function() {},
@@ -43,7 +45,7 @@ class Namespace extends React.Component {
 
   get function_name() {
     return this.props.findBy ? "fetchById" : (
-      this.props.filterBy || this.props.objectParent ? "fetchByParentId" : "fetchAll"
+      this.props.hasRelation ? "fetchByParentId" : "fetchAll"
     );
   }
 

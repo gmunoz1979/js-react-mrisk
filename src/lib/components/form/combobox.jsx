@@ -1,12 +1,11 @@
-import React from "react";
-import Field from "./field";
-import Form  from "./form";
+import React    from "react";
+import Field    from "./field";
+import Form     from "./form";
+import Relation from "../relation";
 
 class Combobox extends Field {
 
-  state = {
-    json: []
-  }
+  state = { json: [] }
 
   insertDefault(values) {
     values = [].slice.call(values);
@@ -18,35 +17,6 @@ class Combobox extends Field {
     values.unshift(_default);
 
     return values;
-  }
-
-  static async updateCombobox(k, json, field, form) {
-    const isView = field.classList.contains("combobox");
-    const c = field.component;
-    const p = c.props;
-    const path = `${p.name}.${isView ? p.textValue : p.idValue}`;
-
-    field.value = json[path];
-
-    const namespace = field.parentNode.querySelector(".namespace");
-
-    if (!namespace || !namespace.component.props.filterBy) {
-      return;
-    }
-
-    const cbx        = form.querySelector(`*[name=${namespace.component.props.filterBy}]`);
-    const cbx_isView = cbx.classList.contains("combobox");
-    const cbx_p      = cbx.component.props;
-    const cbx_path   = `${p.name}.${cbx_p.name}.${cbx_isView ? cbx_p.textValue : cbx_p.idValue}`
-
-    cbx.value = json[cbx_path];
-
-    if (!cbx_isView) {
-      let data = await namespace.component.getData({ id: [cbx.value] })
-      namespace.component.setState({ json: data });
-
-      field.value = json[path];
-    }
   }
 
   handlerAction(json) {
@@ -64,24 +34,44 @@ class Combobox extends Field {
     e.target.dispatchEvent(event);
   }
 
+  setData(data) {
+    this.setState({ json: data });
+  }
+
   render() {
-    let namespace = null;
+    let hasRelation = false;
 
-    React.Children.map(this.props.children, (c) => {
-      if (c.type.name === "Namespace") {
-        let props = {
-          handlerAction: this.handlerAction.bind(this)
-        };
-
-        namespace = React.cloneElement(c, props);
+    React.Children.forEach(this.props.children, c =>
+      {
+        if (c.type === Relation) {
+          hasRelation = true;
+        }
       }
-    });
+    );
+
+    const children = React.Children.map(this.props.children, c =>
+      {
+        if (c.type.name === "Namespace") {
+          let props = Object.assign({}, c.props,
+            {
+              handlerAction: this.handlerAction.bind(this),
+              hasRelation:   hasRelation,
+              autoLoad:      !hasRelation
+            }
+          );
+
+          return React.cloneElement(c, props);
+        }
+
+        return c;
+      }
+    );
 
     const style  = { width: (this.props.width - this.props.titleWidth - 5) + "px" };
     const values = this.insertDefault(this.state.json);
 
     const field = (
-      <div>
+      <div className="combobox">
         <select
           style    = { style }
           name     = { this.props.name }
@@ -92,7 +82,7 @@ class Combobox extends Field {
             return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
           }) }
         </select>
-        { namespace && namespace }
+        { children }
       </div>
     );
 
