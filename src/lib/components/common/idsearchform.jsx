@@ -8,7 +8,7 @@ const Row       = LibForm.Row;
 const Button    = LibForm.Button;
 const TextField = LibForm.TextField;
 
-class IdSearchForm extends React.Component {
+class IdSearchForm extends Form {
 
   launchEvent(name, params={}) {
     const event = new CustomEvent(name,
@@ -17,8 +17,7 @@ class IdSearchForm extends React.Component {
       }
     );
 
-    const form = ReactDOM.findDOMNode(this.form);
-    form.dispatchEvent(event);
+    this.form.dispatchEvent(event);
   }
 
   handlerNew() {
@@ -26,7 +25,7 @@ class IdSearchForm extends React.Component {
   }
 
   handlerView() {
-    if (!this.form.isValid) {
+    if (!this.isValid) {
       Message.showMessage("Debe ingresar un ID");
       return;
     }
@@ -35,7 +34,7 @@ class IdSearchForm extends React.Component {
   }
 
   handlerEdit() {
-    if (!this.form.isValid) {
+    if (!this.isValid) {
       Message.showMessage("Debe ingresar un ID");
       return;
     }
@@ -43,39 +42,38 @@ class IdSearchForm extends React.Component {
     this.launchEvent("edit", { id: this.idField.value })
   }
 
-  render() {
-    return (
-      <Form
-        ref           = { f => this.form = f }
-        name          = { this.props.name }
-        handlerSubmit = { this.handlerView.bind(this) }
-      >
-        <Row>
-          <Button
-            text         = "Nuevo"
-            width        = "auto"
-            handlerClick = { this.handlerNew.bind(this) }
-          />
-          <TextField
-            ref        = { f => this.idField = f }
-            title      = "Id"
-            titleWidth = "15"
-            name       = "id"
-            width      = "auto"
-            required   = {true}
-          />
-          <Button
-            text         = "Ver"
-            width        = "auto"
-            handlerClick = { this.handlerView.bind(this) }
-          />
-          <Button
-            text         = "Editar"
-            width        = "auto"
-            handlerClick = { this.handlerEdit.bind(this) }
-          />
-        </Row>
-      </Form>
+  /**
+   * Override function handlerSubmit
+   */
+  handlerSubmit = this.handlerView
+
+  render(children=this.props.children) {
+    return super.render(
+      <Row>
+        <Button
+          text         = "Nuevo"
+          width        = "auto"
+          handlerClick = { this.handlerNew.bind(this) }
+        />
+        <TextField
+          ref        = { f => this.idField = f }
+          title      = "Id"
+          titleWidth = "15"
+          name       = "id"
+          width      = "auto"
+          required   = {true}
+        />
+        <Button
+          text         = "Ver"
+          width        = "auto"
+          handlerClick = { this.handlerView.bind(this) }
+        />
+        <Button
+          text         = "Editar"
+          width        = "auto"
+          handlerClick = { this.handlerEdit.bind(this) }
+        />
+      </Row>
     );
   }
 }
