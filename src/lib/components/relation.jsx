@@ -1,30 +1,27 @@
 import React         from "react";
 import FetchableForm from "./common/fetchableform";
+import IdSearchForm  from "./common/idsearchform";
 import Util          from "../util";
 
 class Relation extends React.Component {
 
   componentDidMount() {
-    const app      = this.target.closest(".app");
-    const formTo   = Util.findReact(this.target.closest("form"));
-    const formWith = app.querySelector(`*[name=${this.props.with}]`);
+    const relTo   = Util.findReact(this.target.closest("form"));
+    const relWith = Util.findReact(document.body.querySelector(`*[name=${this.props.with}]`));
 
-    if (formTo instanceof FetchableForm) {
-      formWith.addEventListener("new", e => {
-        formTo.clear();
+    if (relWith instanceof IdSearchForm) {
+      relWith.form.addEventListener("new", e => {
+        relTo.clear();
       });
 
-      formWith.addEventListener("edit", e => {
-        formTo.fetchById([e.detail.id]);
+      relWith.form.addEventListener("edit", e => {
+        relTo.fetchById([e.detail.id]);
       });
 
-      formWith.addEventListener("view", e => {
-        formTo.fetchById([e.detail.id]);
+      relWith.form.addEventListener("view", e => {
+        relTo.fetchById([e.detail.id]);
       });
-
-      return;
     }
-
   }
 
   render() {
