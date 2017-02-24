@@ -1,6 +1,6 @@
-import React from "react";
-import Form  from "./form/form";
-import Util from "../util";
+import React         from "react";
+import FetchableForm from "./common/fetchableform";
+import Util          from "../util";
 
 class Relation extends React.Component {
 
@@ -9,19 +9,22 @@ class Relation extends React.Component {
     const formTo   = Util.findReact(this.target.closest("form"));
     const formWith = app.querySelector(`*[name=${this.props.with}]`);
 
-    console.debug(typeof(formWith));
+    if (formTo instanceof FetchableForm) {
+      formWith.addEventListener("new", e => {
+        formTo.clear();
+      });
 
-    formWith.addEventListener("new", e => {
-      formTo.clear();
-    });
+      formWith.addEventListener("edit", e => {
+        formTo.fetchById([e.detail.id]);
+      });
 
-    formWith.addEventListener("edit", e => {
-      formTo.fetchById([e.detail.id]);
-    });
+      formWith.addEventListener("view", e => {
+        formTo.fetchById([e.detail.id]);
+      });
 
-    formWith.addEventListener("view", e => {
-      formTo.fetchById([e.detail.id]);
-    });
+      return;
+    }
+
   }
 
   render() {
