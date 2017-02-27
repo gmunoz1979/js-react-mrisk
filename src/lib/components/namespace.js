@@ -164,6 +164,11 @@ class Namespace extends React.Component {
     return json;
   }
 
+  async getAll() {
+    let json = await this.getData({}, "fetchAll");
+    return json;
+  }
+
   async getData(params, function_name) {
     let url = this.getUrl(function_name) + (params ? "?options=" + JSON.stringify(params).replace(/(\"|\'|\s)/g, "") : "");
 

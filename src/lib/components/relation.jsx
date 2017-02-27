@@ -30,6 +30,21 @@ class Relation extends React.Component {
       return;
     }
 
+    if (relFrom instanceof Combobox) {
+
+      const targetFrom = relFrom._field;
+      targetFrom.addEventListener("value", e =>
+        {
+          const target    = e.currentTarget;
+          const namespace = Util.findReact(target.parentNode.querySelector(".namespace"));
+          namespace.getAll().then(d => {
+            relFrom.setData(d);
+            relFrom.value = e.detail.value;
+          });
+        }
+      );
+    }
+
     if (relWith instanceof Combobox) {
       const target = relWith._field;
       target.addEventListener("change", e =>
