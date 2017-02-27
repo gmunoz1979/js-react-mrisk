@@ -39,7 +39,7 @@ class Relation extends React.Component {
           const namespace = Util.findReact(target.parentNode.querySelector(".namespace"));
           namespace.getAll().then(d => {
             relFrom.setData(d);
-            relFrom.value = e.detail.value;
+            target.value = e.detail.value;
           });
         }
       );
