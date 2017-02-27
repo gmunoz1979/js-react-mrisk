@@ -18,6 +18,14 @@ class Field extends React.Component {
 
   set value(value) {
     this.field.value = value;
+
+    const event = new CustomEvent("value",
+      {
+        detail: { value: value }
+      }
+    );
+
+    this.field.dispatchEvent(event);
   }
 
   render(children) {
