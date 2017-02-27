@@ -22,7 +22,7 @@ class Form extends React.Component {
         k = k.split(/\./)[0];
       }
 
-      fields[k] = this.form.querySelector(`*[name=${k}]`);
+      fields[k] = Util.findReact(this.form.querySelector(`*[name=${k}]`));
     }
 
     return fields;
