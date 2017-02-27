@@ -39,6 +39,18 @@ class Combobox extends Field {
     this.setState({ data: data });
   }
 
+  componentDidUpdate() {
+    const event = new CustomEvent("update_data",
+      {
+        detail: {
+          data: this.state.data
+        }
+      }
+    );
+
+    this.field.dispatchEvent(event);
+  }
+
   render() {
     let hasRelation = false;
 
