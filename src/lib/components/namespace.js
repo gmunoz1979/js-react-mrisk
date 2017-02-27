@@ -9,8 +9,6 @@ class Namespace extends React.Component {
     autoLoad:         React.PropTypes.bool,
     method:           React.PropTypes.string,
     showMessageError: React.PropTypes.bool,
-    //filterBy:         React.PropTypes.string,
-    //objectParent:     React.PropTypes.string,
     hasRelation:      React.PropTypes.bool,
     action:           React.PropTypes.func,
     actionError:      React.PropTypes.func,
@@ -19,11 +17,9 @@ class Namespace extends React.Component {
   }
 
   static defaultProps = {
-    autoLoad:       true,
+    autoLoad:         true,
     method:           "GET",
     showMessageError: true,
-    //filterBy:         null,
-    //objectParent:     null,
     hasRelation:      false,
     action:           function() {},
     actionError:      function() {},
@@ -32,22 +28,14 @@ class Namespace extends React.Component {
     handlerSave:      function() {}
   }
 
-  state = {
-    json: []
-  }
-
-  _isMonted = false
-
-  _isFirst  = true
+  state = { data: [] }
 
   updateValues() {
     throw new Error("No implementado.");
   }
 
   get function_name() {
-    return this.props.findBy ? "fetchById" : (
-      this.props.hasRelation ? "fetchByParentId" : "fetchAll"
-    );
+    return this.props.hasRelation ? "fetchByParentId" : "fetchAll";
   }
 
   getUrl(function_name = this.function_name) {
@@ -76,7 +64,7 @@ class Namespace extends React.Component {
   }
 
   clear() {
-    this.setState({ json: [] });
+    this.setState({ data: [] });
   }
 
   handlerError(response) {
@@ -229,51 +217,17 @@ class Namespace extends React.Component {
   }
 
   get_options() {
-    const get_all = !this.props.filterBy && !this.props.objectParent && !this.props.findBy;
-
-    if (this.props.autoLoad && get_all) {
-      this.getData().then(json => this.setState({json: json}));
-      this._isFirst = false;
+    if (this.props.autoLoad) {
+      this.getData().then(data => this.setState({data: data}));
       return;
-    }
-
-    let app    = this.target.closest(".container");
-    let object = app.querySelector(`*[name=${ this.props.objectParent || this.props.filterBy }]`);
-
-    if (this.props.objectParent) {
-      object.addEventListener("select", e =>
-        {
-          if (!e.detail.row || e.detail.index === -1) {
-            this.setState({ json: [] });
-            return;
-          }
-
-          let value = e.detail.row[e.detail.id];
-          this.getData({ id: [value] }).then(json => this.setState({ json: json }));
-        }
-      );
-      return;
-    }
-
-    if (this.props.filterBy && !object.has_update_event) {
-      object.has_update_event = true;
-      object.addEventListener("update", e =>
-        {
-          let target = e.target;
-          this.getData({ id: [target.value] }).then(json => this.setState({ json: json }));
-        }
-      );
     }
   }
 
   componentDidMount() {
     this.get_options();
-    this._isMonted = true;
   }
 
   render() {
-    this._isMonted && this._isFirst && this.get_options();
-
     return (
       <div className="namespace" ref = { target => this.target = target }>
         {
