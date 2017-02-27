@@ -7,9 +7,10 @@ import Util          from "../util";
 class Relation extends React.Component {
 
   componentDidMount() {
+    const app     = this.target.closest(".app");
     const relFrom = Util.findReact(this.target.closest(".combobox")) ||
                     Util.findReact(this.target.closest("form"));
-    const relWith = Util.findReact(document.body.querySelector(`*[name=${this.props.with}]`));
+    const relWith = Util.findReact(app.querySelector(`*[name=${this.props.with}]`));
 
     if (relWith instanceof IdSearchForm) {
       relWith.form.addEventListener("new", e => {
@@ -35,38 +36,58 @@ class Relation extends React.Component {
       const targetFrom = relFrom._field;
       const namespace  = Util.findReact(targetFrom.parentNode.querySelector(".namespace"));
 
-      let value;
+      targetWith.relation = targetFrom;
+      targetFrom.addEventListener("value", e => this.relationNested(e.currentTarget, relFrom.json));
 
-      targetFrom.addEventListener("value", e =>
+      targetWith.addEventListener("change", e =>
         {
-          value = e.detail.value;;
+          const target    = e.currentTarget.relation;
+          const rel       = Util.findReact(target);
+          const namespace = Util.findReact(target.parentNode.querySelector(".namespace"));
 
-          if (namespace.props.object) {
-            targetWith.value = relFrom.json[`${namespace.props.object}.${targetWith.name}`];
-            const evt = new CustomEvent("change", { details: {} });
-            targetWith.dispatchEvent(evt);
+          if (rel && rel instanceof Combobox) {
+            const value = e.currentTarget.dataset.value;
+            namespace.getData({ id: [value] });
+            return;
           }
         }
       );
 
       targetFrom.addEventListener("update_data", e =>
         {
+          const target = e.currentTarget;
+          const value  = target.dataset.value;
+
           if (Util.hasValue(value)) {
-            targetFrom.value = value;
+            target.value = value;
           }
         }
       );
 
-      targetWith.addEventListener("change", e =>
-        {
-          if (relFrom instanceof Combobox) {
-            namespace.getData({ id: [relWith.value] });
-            return;
-          }
-        }
-      );
       return;
     }
+  }
+
+  relationNested(target, json, object="") {
+    const app       = target.closest(".app");
+    const component = Util.findReact(target);
+    const relation  = Util.findReact(target.parentNode.querySelector(".relation"));
+    const namespace = Util.findReact(target.parentNode.querySelector(".namespace"));
+
+    object += namespace.props.object;
+
+    const value = json[`${object}.${component.props.idValue}`];
+
+    target.dataset.value = value;
+    target.value = value;
+
+    if (relation) {
+      const targetWith = app.querySelector(`*[name=${relation.props.with}]`)
+      this.relationNested(targetWith, json, object + ".");
+    }
+
+    const evt = new CustomEvent("change", { details: {} });
+    target.dispatchEvent(evt);
   }
 
   render() {
