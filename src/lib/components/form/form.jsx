@@ -42,6 +42,7 @@ class Form extends React.Component {
 
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
+        field.json  = json; // Guardamos por completo los datos.
         field.value = json[k];
       }
     }

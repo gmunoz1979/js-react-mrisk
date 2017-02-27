@@ -28,6 +28,14 @@ class Field extends React.Component {
     this.field.dispatchEvent(event);
   }
 
+  set json(value) {
+    this._json = value;
+  }
+
+  get json() {
+    return this._json;
+  }
+
   render(children) {
     const width      = this.props.width + "px";
     const titleWidth = this.props.titleWidth + "px";
