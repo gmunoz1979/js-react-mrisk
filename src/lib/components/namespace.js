@@ -1,6 +1,7 @@
 import React   from "react";
 import Message from "./message";
 import Config  from "../config";
+import Util    from "../util";
 
 class Namespace extends React.Component {
 
@@ -51,19 +52,6 @@ class Namespace extends React.Component {
 
   getUrl(function_name = this.function_name) {
     return `${Config.Url}/${Config.Context}/${Config.Handler}/${this.props.path}/${function_name}.json`;
-  }
-
-  hasValue(o) {
-    return o !== undefined && o !== null;
-  }
-
-  isDate(o) {
-    return this.hasValue(o.year)       &&
-           this.hasValue(o.month)      &&
-           this.hasValue(o.dayOfMonth) &&
-           this.hasValue(o.hourOfDay)  &&
-           this.hasValue(o.minute)     &&
-           this.hasValue(o.second);
   }
 
   getHeaders() {
@@ -203,7 +191,7 @@ class Namespace extends React.Component {
 
         let fn = (item, o, prefix="") => {
           for (const key in item) {
-            if (typeof(item[key]) === "object" && !this.isDate(item[key])) {
+            if (typeof(item[key]) === "object" && !Util.isDate(item[key])) {
               fn(item[key], o, prefix + key + ".");
             } else {
               o[prefix+key] = item[key];

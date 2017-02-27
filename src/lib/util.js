@@ -1,3 +1,5 @@
+import Config  from "./config";
+
 function findReact(dom) {
   for (var key in dom) {
     if (key.startsWith("__reactInternalInstance$")) {
@@ -20,7 +22,22 @@ function isArray(o) {
   return types[0] === type.call(o);
 }
 
+function isDate(o) {
+  return this.hasValue(o.year)       &&
+         this.hasValue(o.month)      &&
+         this.hasValue(o.dayOfMonth) &&
+         this.hasValue(o.hourOfDay)  &&
+         this.hasValue(o.minute)     &&
+         this.hasValue(o.second);
+}
+
+function hasValue(o) {
+  return o !== undefined && o !== null;
+}
+
 export default {
   findReact: findReact,
-  isArray:   isArray
+  isArray:   isArray,
+  isDate:    isDate,
+  hasValue:  hasValue
 }
