@@ -72,7 +72,7 @@ class App extends React.Component {
             textValue  = "name">
             <Relation with = "tipo_id" />
             <Namespace
-              path = "Nivel1/SubTipo" />
+              path = "Nivel1/SubTipo" object = "sub_tipo" />
           </Combobox>
         </Row>
         <Row>
