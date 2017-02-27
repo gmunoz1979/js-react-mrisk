@@ -10,11 +10,12 @@ class Combobox extends Field {
   insertDefault(values) {
     values = [].slice.call(values);
 
-    let _default = {};
-    _default[this.props.idValue]   = 0;
-    _default[this.props.textValue] = "Seleccione";
-
-    values.unshift(_default);
+    values.unshift(
+      {
+        [this.props.idValue]:   0,
+        [this.props.textValue]: "Seleccione"
+      }
+    );
 
     return values;
   }
