@@ -5,7 +5,7 @@ import Relation from "../relation";
 
 class Combobox extends Field {
 
-  state = { json: [] }
+  state = { data: [] }
 
   insertDefault(values) {
     values = [].slice.call(values);
@@ -19,9 +19,9 @@ class Combobox extends Field {
     return values;
   }
 
-  handlerAction(json) {
+  handlerAction(data) {
     this.field.value = "";
-    this.setState({ json: json });
+    this.setState({ data: data });
   }
 
   handlerChange(e) {
@@ -35,7 +35,7 @@ class Combobox extends Field {
   }
 
   setData(data) {
-    this.setState({ json: data });
+    this.setState({ data: data });
   }
 
   render() {
@@ -68,7 +68,7 @@ class Combobox extends Field {
     );
 
     const style  = { width: (this.props.width - this.props.titleWidth - 5) + "px" };
-    const values = this.insertDefault(this.state.json);
+    const values = this.insertDefault(this.state.data);
 
     const field = (
       <div className="combobox">
