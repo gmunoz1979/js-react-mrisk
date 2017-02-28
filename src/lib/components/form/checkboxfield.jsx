@@ -8,11 +8,12 @@ class CheckboxField extends Field {
     const field = (
       <div>
         <input
-          type = "checkbox"
-          name = { this.props.name }
-          ref  = { field => this.field = field }
-          disabled = { this.props.readOnly }
-          required = { this.props.required } />
+          className = "field"
+          type      = "checkbox"
+          name      = { this.props.name }
+          ref       = { field => this.field = field }
+          disabled  = { this.props.readOnly }
+          required  = { this.props.required } />
         <label>
           {this.props.text}
         </label>

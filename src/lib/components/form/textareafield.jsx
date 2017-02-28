@@ -12,10 +12,11 @@ class TextAreaField extends Field {
 
     let field = (
       <textarea
-        style    = { style }
-        name     = { this.props.name }
-        ref      = { field => this.field = field }
-        required = { this.props.required } ></textarea>
+        className = "field"
+        style     = { style }
+        name      = { this.props.name }
+        ref       = { field => this.field = field }
+        required  = { this.props.required } ></textarea>
     );
 
     return super.render(field);

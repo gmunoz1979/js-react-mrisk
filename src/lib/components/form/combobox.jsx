@@ -86,11 +86,12 @@ class Combobox extends Field {
     const field = (
       <div className="combobox">
         <select
-          style    = { style }
-          name     = { this.props.name }
-          ref      = { field => this.field = field }
           onChange = { this.handlerChange.bind(this) }
-          required = { this.required } >
+          className = "field"
+          style     = { style }
+          name      = { this.props.name }
+          ref       = { field => this.field = field }
+          required  = { this.required } >
           { values.map((o, i) => {
             return <option key={i} value={ o[this.props.idValue] }>{ o[this.props.textValue] }</option>
           }) }
