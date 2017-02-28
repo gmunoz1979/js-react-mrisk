@@ -13,19 +13,34 @@ class Relation extends React.Component {
     const relWith = Util.findReact(app.querySelector(`*[name=${this.props.with}]`));
 
     if (relWith instanceof IdSearchForm) {
-      relWith.form.addEventListener("new", e => {
-        relFrom instanceof FetchableForm &&
+      relWith.form.addEventListener(IdSearchForm.method.NEW, e => {
+        if (relFrom instanceof FetchableForm) {
+          const relModeForm = Util.findReact(this.target.closest(".modeform"));
+          relModeForm &&
+            relModeForm.changeMode(IdSearchForm.method.NEW);
+
           relFrom.clear();
+        }
       });
 
-      relWith.form.addEventListener("edit", e => {
-        relFrom instanceof FetchableForm &&
+      relWith.form.addEventListener(IdSearchForm.method.EDIT, e => {
+        if (relFrom instanceof FetchableForm) {
+          const relModeForm = Util.findReact(this.target.closest(".modeform"));
+          relModeForm &&
+            relModeForm.changeMode(IdSearchForm.method.EDIT);
+
           relFrom.fetchById([e.detail.id]);
+        }
       });
 
-      relWith.form.addEventListener("view", e => {
-        relFrom instanceof FetchableForm &&
+      relWith.form.addEventListener(IdSearchForm.method.VIEW, e => {
+        if (relFrom instanceof FetchableForm) {
+          const relModeForm = Util.findReact(this.target.closest(".modeform"));
+          relModeForm &&
+            relModeForm.changeMode(IdSearchForm.method.VIEW);
+
           relFrom.fetchById([e.detail.id]);
+        }
       });
 
       return;
