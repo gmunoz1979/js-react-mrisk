@@ -58,7 +58,9 @@ class Relation extends React.Component {
           const target = e.currentTarget;
           const value  = target.dataset.value;
 
-          if (Util.hasValue(value)) {
+          console.debug(target, target.value, target.dataset.value);
+
+          if (Util.hasValue(value) && value.length !== 0) {
             target.value = value;
           }
         }
@@ -72,9 +74,8 @@ class Relation extends React.Component {
     const app       = target.closest(".app");
     const component = Util.findReact(target);
     const relation  = Util.findReact(target.parentNode.querySelector(".relation"));
-    const namespace = Util.findReact(target.parentNode.querySelector(".namespace"));
 
-    object += namespace.props.object;
+    object += component.props.object;
 
     const value = json[`${object}.${component.props.idValue}`];
 
