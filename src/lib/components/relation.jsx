@@ -37,7 +37,12 @@ class Relation extends React.Component {
       const namespace  = Util.findReact(targetFrom.parentNode.querySelector(".namespace"));
 
       targetWith.relation = targetFrom;
-      targetFrom.addEventListener("value", e => this.relationNested(e.currentTarget, relFrom.json));
+
+      targetFrom.addEventListener("value", e =>
+        {
+          this.relationNested(e.currentTarget, relFrom.json)
+        }
+      );
 
       targetWith.addEventListener("change", e =>
         {
@@ -53,12 +58,10 @@ class Relation extends React.Component {
         }
       );
 
-      targetFrom.addEventListener("update_data", e =>
+      targetFrom.addEventListener("update", e =>
         {
           const target = e.currentTarget;
           const value  = target.dataset.value;
-
-          console.debug(target, target.value, target.dataset.value);
 
           if (Util.hasValue(value) && value.length !== 0) {
             target.value = value;

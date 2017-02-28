@@ -25,22 +25,12 @@ class Combobox extends Field {
     this.setState({ data: data });
   }
 
-  handlerChange(e) {
-    const event = new CustomEvent("update",
-      {
-        detail: {}
-      }
-    );
-
-    e.target.dispatchEvent(event);
-  }
-
   setData(data) {
     this.setState({ data: data });
   }
 
   componentDidUpdate() {
-    const event = new CustomEvent("update_data",
+    const event = new CustomEvent("update",
       {
         detail: {
           data: this.state.data
@@ -86,7 +76,6 @@ class Combobox extends Field {
     const field = (
       <div className="combobox">
         <select
-          onChange = { this.handlerChange.bind(this) }
           className = "field"
           style     = { style }
           name      = { this.props.name }
