@@ -40,18 +40,21 @@ class Relation extends React.Component {
 
       targetFrom.addEventListener("value", e =>
         {
-          this.relationNested(e.currentTarget, relFrom.json)
+          e.target.dataset.value = e.detail.value;
+          this.relationNested(e.target, relFrom.json)
         }
       );
 
       targetWith.addEventListener("change", e =>
         {
-          const target    = e.currentTarget.relation;
+          const target    = e.target.relation;
           const rel       = Util.findReact(target);
           const namespace = Util.findReact(target.parentNode.querySelector(".namespace"));
 
+          e.target.dataset.value = e.detail ? e.detail.value : e.target.value;
+
           if (rel && rel instanceof Combobox) {
-            const value = e.currentTarget.dataset.value;
+            const value = e.detail ? e.detail.value : e.target.value;
             namespace.getData({ id: [value] });
             return;
           }
@@ -60,11 +63,19 @@ class Relation extends React.Component {
 
       targetFrom.addEventListener("update", e =>
         {
-          const target = e.currentTarget;
-          const value  = target.dataset.value;
+          const value = e.target.dataset.value;
 
           if (Util.hasValue(value) && value.length !== 0) {
-            target.value = value;
+            if (e.target.querySelectorAll(`option[value="${value}"]`).length === 0) {
+              e.target.dataset.value = 0;
+              e.target.value         = 0;
+              const evt = new CustomEvent("change", { detail: { value: 0 } });
+              e.target.dispatchEvent(evt);
+              return;
+            }
+
+            e.target.dataset.value = value;
+            e.target.value         = value;
           }
         }
       );
@@ -83,14 +94,14 @@ class Relation extends React.Component {
     const value = json[`${object}.${component.props.idValue}`];
 
     target.dataset.value = value;
-    target.value = value;
+    target.value         = value;
 
     if (relation) {
       const targetWith = app.querySelector(`*[name=${relation.props.with}]`)
       this.relationNested(targetWith, json, object + ".");
     }
 
-    const evt = new CustomEvent("change", { details: {} });
+    const evt = new CustomEvent("change", { detail: { value: value } });
     target.dispatchEvent(evt);
   }
 
