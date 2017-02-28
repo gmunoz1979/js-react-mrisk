@@ -1,0 +1,56 @@
+version: '2'
+
+volumes:
+  mrisk.db.test:
+     external: true
+
+services:
+  db:
+    container_name: mrisk-db-test
+    image: postgres-9.4
+    volumes:
+      - mrisk.db.test:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  memcached:
+    container_name: pruebas-memcached
+    image: memcached:alpine
+
+  nginx:
+    container_name: pruebas-nginx
+    image: halftau/nginx-ssl-pruebas
+    ports:
+      - "443:443"
+    links:
+      - jre-pruebas
+      - jre-login
+    networks:
+      default:
+        aliases:
+          - local.halftau.com
+
+  jre-pruebas:
+    container_name: pruebas-jre-pruebas
+    image: halftau/pruebas
+    environment:
+      - HALFTAU_PRUEBAS_DB_USER=web
+      - HALFTAU_PRUEBAS_DB_PASSWORD=php
+      - HALFTAU_PRUEBAS_DB_HOST=192.168.0.17
+      - HALFTAU_PRUEBAS_APP_ID=540289891877889
+    depends_on:
+      - db
+    links:
+      - memcached
+      
+  jre-login:
+    container_name: pruebas-jre-login
+    image: halftau/login
+    environment:
+      - HALFTAU_LOGIN_DB_USER=web
+      - HALFTAU_LOGIN_DB_PASSWORD=php
+      - HALFTAU_LOGIN_DB_HOST=192.168.0.17
+    depends_on:
+      - db
+    links:
+      - memcached
