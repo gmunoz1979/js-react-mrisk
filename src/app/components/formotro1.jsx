@@ -47,9 +47,10 @@ class FormOtro1 extends React.Component {
           width      = "180"
           name       = "tipo_id"
           idValue    = "tipo_id"
-          textValue  = "name" >
+          textValue  = "name"
+          object     = "tipo" >
           <Namespace
-            path = "Otro1/Tipo" object = "tipo" />
+            path = "Otro1/Tipo" />
         </Combobox>
         <Combobox
           title      = "Sub tipo"
@@ -57,10 +58,11 @@ class FormOtro1 extends React.Component {
           width      = "200"
           name       = "subt_id"
           idValue    = "subt_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_tipo">
           <Relation with = "tipo_id" />
           <Namespace
-            path = "Otro1/SubTipo" object = "sub_tipo" />
+            path = "Otro1/SubTipo" />
         </Combobox>
         <Combobox
           title      = "Sub sub tipo"
@@ -68,10 +70,11 @@ class FormOtro1 extends React.Component {
           width      = "230"
           name       = "ssub_id"
           idValue    = "ssub_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_sub_tipo">
           <Relation with = "subt_id" />
           <Namespace
-            path = "Otro1/SubSubTipo" object = "sub_sub_tipo" />
+            path = "Otro1/SubSubTipo" />
         </Combobox>
         <Combobox
           title      = "Sub sub sub tipo"
@@ -79,10 +82,11 @@ class FormOtro1 extends React.Component {
           width      = "auto"
           name       = "sssu_id"
           idValue    = "sssu_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_sub_sub_tipo">
           <Relation with = "ssub_id" />
           <Namespace
-            path = "Otro1/SubSubSubTipo" object = "sub_sub_sub_tipo" />
+            path = "Otro1/SubSubSubTipo" />
         </Combobox>
       </Row>
       <Row>
@@ -92,9 +96,10 @@ class FormOtro1 extends React.Component {
           width      = "180"
           name       = "tipo_id_final"
           idValue    = "tipo_id"
-          textValue  = "name" >
+          textValue  = "name"
+          object     = "tipo" >
           <Namespace
-            path = "Otro1/Tipo" object = "tipo" />
+            path = "Otro1/Tipo" />
         </Combobox>
         <Combobox
           title      = "Sub tipo final"
@@ -102,10 +107,11 @@ class FormOtro1 extends React.Component {
           width      = "200"
           name       = "subt_id_final"
           idValue    = "subt_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_tipo">
           <Relation with = "tipo_id_final" />
           <Namespace
-            path = "Otro1/SubTipo" object = "sub_tipo" />
+            path = "Otro1/SubTipo" />
         </Combobox>
         <Combobox
           title      = "Sub sub tipo final"
@@ -113,10 +119,11 @@ class FormOtro1 extends React.Component {
           width      = "230"
           name       = "ssub_id_final"
           idValue    = "ssub_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_sub_tipo">
           <Relation with = "subt_id_final" />
           <Namespace
-            path = "Otro1/SubSubTipo" object = "sub_sub_tipo" />
+            path = "Otro1/SubSubTipo" />
         </Combobox>
         <Combobox
           title      = "Sub sub sub tipo final"
@@ -124,10 +131,11 @@ class FormOtro1 extends React.Component {
           width      = "auto"
           name       = "sssu_id_final"
           idValue    = "sssu_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_sub_sub_tipo_final">
           <Relation with = "ssub_id_final" />
           <Namespace
-            path = "Otro1/SubSubSubTipo" object = "sub_sub_sub_tipo_final" />
+            path = "Otro1/SubSubSubTipo" />
         </Combobox>
       </Row>
     </StorableForm>

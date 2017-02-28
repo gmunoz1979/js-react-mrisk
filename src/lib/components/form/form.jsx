@@ -17,13 +17,13 @@ class Form extends React.Component {
   getFields(json) {
     let fields = {};
 
-    for (let [k, v] of Object.entries(json)) {
-      if (/\./g.exec(k)) {
-        k = k.split(/\./)[0];
+    let targets = [].slice.call(this.form.querySelectorAll(".field"));
+    targets.forEach(t =>
+      {
+        let component = Util.findReact(t);
+        fields[component.props.name] = component;
       }
-
-      fields[k] = Util.findReact(this.form.querySelector(`*[name=${k}]`));
-    }
+    );
 
     return fields;
   }
@@ -42,8 +42,16 @@ class Form extends React.Component {
 
     for (let [k, field] of Object.entries(this.getFields(json))) {
       if (field) {
-        field.json  = json; // Guardamos por completo los datos.
-        field.value = json[k];
+        let name = field instanceof Combobox ? field.props.idValue : field.props.name;
+
+        if (field.props.object.length !== 0) {
+          name = field.props.object + "." + name;
+        }
+
+        if (json[name] !== undefined) {
+          field.json  = json; // Guardamos por completo los datos.
+          field.value = json[name];
+        }
       }
     }
 

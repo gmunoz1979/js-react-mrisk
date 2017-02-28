@@ -38,7 +38,8 @@ class FormNivel1 extends React.Component {
           width      = "auto"
           name       = "tipo_id"
           idValue    = "tipo_id"
-          textValue  = "name" >
+          textValue  = "name"
+          object     = "tipo" >
           <Namespace
             path = "Nivel1/Tipo" />
         </Combobox>
@@ -48,10 +49,11 @@ class FormNivel1 extends React.Component {
           width      = "200"
           name       = "subt_id"
           idValue    = "subt_id"
-          textValue  = "name">
+          textValue  = "name"
+          object     = "sub_tipo">
           <Relation with = "tipo_id" />
           <Namespace
-            path = "Nivel1/SubTipo" object = "sub_tipo" />
+            path = "Nivel1/SubTipo" />
         </Combobox>
       </Row>
       <Row>
