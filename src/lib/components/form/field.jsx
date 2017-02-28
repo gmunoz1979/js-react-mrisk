@@ -2,6 +2,10 @@ import React  from "react";
 
 class Field extends React.Component {
 
+  static defaultProps = {
+    object: ""
+  }
+
   set field(value) {
     value = value || {};
     value.component = this;
