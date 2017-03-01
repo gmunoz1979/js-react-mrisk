@@ -108,16 +108,21 @@ class Relation extends React.Component {
 
     const value = json[`${object}.${component.props.idValue}`];
 
-    target.dataset.value = value;
-    target.value         = value;
+    setTimeout(() =>
+      {
+        target.dataset.value = value;
+        target.value         = value;
 
-    if (relation) {
-      const targetWith = app.querySelector(`*[name=${relation.props.with}]`)
-      this.relationNested(targetWith, json, object + ".");
-    }
+        if (relation) {
+          const targetWith = app.querySelector(`*[name=${relation.props.with}]`)
+          this.relationNested(targetWith, json, object + ".");
+        }
 
-    const evt = new CustomEvent("change", { detail: { value: value } });
-    target.dispatchEvent(evt);
+        const evt = new CustomEvent("change", { detail: { value: value } });
+        target.dispatchEvent(evt);
+      },
+      100
+    );
   }
 
   render() {
