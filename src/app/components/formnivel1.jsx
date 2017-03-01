@@ -27,6 +27,7 @@ class FormNivel1 extends React.Component {
             name       = "niv1_id"
             width      = "150"
             readOnly   = {true}
+            isId       = {true}
           />
         </Row>
         <Row>
