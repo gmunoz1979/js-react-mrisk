@@ -1,11 +1,34 @@
 import React  from "react";
+import Util   from "../../util";
 
 class Field extends React.Component {
 
   static defaultProps = {
-    object: ""
+    id:           Util.getID(),
+    width:        50,
+    titleWidth:   50,
+    title:        "",
+    name:         "",
+    text:         "",
+    object:       "",
     isId:         false,
+    readOnly:     false,
+    modeReadOnly: false,
+    required:     false
+  }
+
+  static propTypes = {
+    id:           React.PropTypes.string,
+    //width:        React.PropTypes.string,
+    //titleWidth:   React.PropTypes.string,
+    title:        React.PropTypes.string,
+    name:         React.PropTypes.string,
+    text:         React.PropTypes.string,
+    object:       React.PropTypes.string,
     isId:         React.PropTypes.bool,
+    readOnly:     React.PropTypes.bool,
+    modeReadOnly: React.PropTypes.bool,
+    required:     React.PropTypes.bool
   }
 
   set field(value) {
@@ -48,7 +71,8 @@ class Field extends React.Component {
 
     return (
       <div style = {{ width: width }}>
-        <label style = {{ width: titleWidth }}>
+        <label
+          style = {{ width: titleWidth }}>
           {this.props.title}
         </label>
         {children}

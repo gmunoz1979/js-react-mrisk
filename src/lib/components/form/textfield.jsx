@@ -9,13 +9,13 @@ class TextField extends Field {
 
     let field = (
       <input
-        className = "field"
-        style     = { style }
-        type      = "text"
-        name      = { this.props.name }
-        ref       = { field => this.field = field }
-        readOnly  = { this.props.readOnly }
-        required  = { this.props.required } />
+        className  = "field"
+        style      = { style }
+        type       = "text"
+        name       = { this.props.name }
+        ref        = { field => this.field = field }
+        readOnly   = { this.props.readOnly || this.props.modeReadOnly }
+        required   = { this.props.required }
       data-is-id = { this.props.isId ? 1 : 0 } />
     );
 
