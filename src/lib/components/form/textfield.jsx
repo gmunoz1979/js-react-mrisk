@@ -16,6 +16,7 @@ class TextField extends Field {
         ref       = { field => this.field = field }
         readOnly  = { this.props.readOnly }
         required  = { this.props.required } />
+      data-is-id = { this.props.isId ? 1 : 0 } />
     );
 
     return super.render(field);

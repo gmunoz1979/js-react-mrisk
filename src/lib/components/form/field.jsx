@@ -4,6 +4,8 @@ class Field extends React.Component {
 
   static defaultProps = {
     object: ""
+    isId:         false,
+    isId:         React.PropTypes.bool,
   }
 
   set field(value) {
