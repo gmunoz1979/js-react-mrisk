@@ -2,18 +2,14 @@ import React        from "react";
 import ReactDOM     from "react-dom";
 import Message      from "../message";
 import * as LibForm from "../form";
-import keyMirror    from "keymirror";
 
 const Form      = LibForm.Form;
 const Row       = LibForm.Row;
 const Button    = LibForm.Button;
 const TextField = LibForm.TextField;
-
-const METHOD = keyMirror({ NEW: null, VIEW: null, EDIT: null });
+const ModeForm  = LibForm.ModeForm;
 
 class IdSearchForm extends Form {
-
-  static method = METHOD
 
   launchEvent(name, params={}) {
     const event = new CustomEvent(name,
@@ -26,7 +22,7 @@ class IdSearchForm extends Form {
   }
 
   handlerNew() {
-    this.launchEvent(METHOD.NEW);
+    this.launchEvent(ModeForm.MODE.NEW);
   }
 
   handlerView() {
@@ -35,7 +31,7 @@ class IdSearchForm extends Form {
       return;
     }
 
-    this.launchEvent(METHOD.VIEW, { id: this.idField.value });
+    this.launchEvent(ModeForm.MODE.VIEW, { id: this.idField.value });
   }
 
   handlerEdit() {
@@ -44,7 +40,7 @@ class IdSearchForm extends Form {
       return;
     }
 
-    this.launchEvent(METHOD.EDIT, { id: this.idField.value })
+    this.launchEvent(ModeForm.MODE.EDIT, { id: this.idField.value })
   }
 
   /**

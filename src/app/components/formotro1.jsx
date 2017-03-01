@@ -4,7 +4,6 @@ import * as Lib from "../../lib/components";
 const Namespace     = Lib.Namespace;
 const Relation      = Lib.Relation;
 
-const ModeForm      = Lib.Form.ModeForm;
 const Row           = Lib.Form.Row;
 const TextField     = Lib.Form.TextField;
 const Empty         = Lib.Form.Empty;
@@ -16,11 +15,10 @@ const StorableForm = Lib.Common.StorableForm;
 
 class FormOtro1 extends React.Component {
   render() {
-    return <ModeForm mode= {ModeForm.VIEW}>
-      <StorableForm
-        name      = "form"
-        namespace = "Otro1"
-      >
+    return <StorableForm
+      name      = "form"
+      namespace = "Otro1"
+      mode      = {StorableForm.MODE.VIEW} >
         <Relation with = {this.props.search} />
         <Row>
           <TextField
@@ -139,7 +137,6 @@ class FormOtro1 extends React.Component {
           </Combobox>
         </Row>
       </StorableForm>
-    </ModeForm>
   }
 }
 

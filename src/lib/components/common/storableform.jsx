@@ -4,9 +4,24 @@ import FetchableForm from "./fetchableform";
 import Row           from "../form/row";
 import Button        from "../form/button";
 import Form          from "../form/form";
+import ModeForm      from "../form/modeform";
 import Util          from "../../util";
 
 class StorableForm extends FetchableForm {
+
+  static MODE = ModeForm.MODE
+
+  static defaultProps = {
+    mode: ModeForm.MODE.NEW
+  }
+
+  state = {
+    mode: this.props.mode
+  }
+
+  changeMode(mode) {
+    this.setState({ mode: mode });
+  }
 
   handlerSave(e) {
     if (!this.isValid) {
@@ -50,7 +65,7 @@ class StorableForm extends FetchableForm {
   }
 
   render(children=this.props.children) {
-    children = React.Children.toArray(children);
+    children = React.Children.toArray(ModeForm.overrideFields(this.state.mode, children));
 
     children.push(
       <Row>

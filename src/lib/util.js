@@ -1,4 +1,5 @@
-import Config  from "./config";
+import React  from "react"; 
+import Config from "./config";
 
 function findReact(dom) {
   for (var key in dom) {
@@ -35,9 +36,21 @@ function hasValue(o) {
   return o !== undefined && o !== null;
 }
 
+function isType(c, o) {
+  if (c === o) {
+    return true;
+  }
+  if (c === React.Component) {
+    return false;
+  }
+
+  return this.isType(c.__proto__, o);
+}
+
 export default {
   findReact: findReact,
   isArray:   isArray,
   isDate:    isDate,
-  hasValue:  hasValue
+  hasValue:  hasValue,
+  isType:    isType
 }

@@ -1,8 +1,9 @@
-import React         from "react";
-import FetchableForm from "./common/fetchableform";
-import IdSearchForm  from "./common/idsearchform";
-import Combobox      from "./form/combobox";
-import Util          from "../util";
+import React        from "react";
+import StorableForm from "./common/storableform";
+import IdSearchForm from "./common/idsearchform";
+import Combobox     from "./form/combobox";
+import ModeForm     from "./form/modeform";
+import Util         from "../util";
 
 class Relation extends React.Component {
 
@@ -13,32 +14,23 @@ class Relation extends React.Component {
     const relWith = Util.findReact(app.querySelector(`*[name=${this.props.with}]`));
 
     if (relWith instanceof IdSearchForm) {
-      relWith.form.addEventListener(IdSearchForm.method.NEW, e => {
-        if (relFrom instanceof FetchableForm) {
-          const relModeForm = Util.findReact(this.target.closest(".modeform"));
-          relModeForm &&
-            relModeForm.changeMode(IdSearchForm.method.NEW);
-
+      relWith.form.addEventListener(ModeForm.MODE.NEW, e => {
+        if (relFrom instanceof StorableForm) {
+          relFrom.changeMode(ModeForm.MODE.NEW);
           relFrom.clear();
         }
       });
 
-      relWith.form.addEventListener(IdSearchForm.method.EDIT, e => {
-        if (relFrom instanceof FetchableForm) {
-          const relModeForm = Util.findReact(this.target.closest(".modeform"));
-          relModeForm &&
-            relModeForm.changeMode(IdSearchForm.method.EDIT);
-
+      relWith.form.addEventListener(ModeForm.MODE.EDIT, e => {
+        if (relFrom instanceof StorableForm) {
+          relFrom.changeMode(ModeForm.MODE.EDIT);
           relFrom.fetchById([e.detail.id]);
         }
       });
 
-      relWith.form.addEventListener(IdSearchForm.method.VIEW, e => {
-        if (relFrom instanceof FetchableForm) {
-          const relModeForm = Util.findReact(this.target.closest(".modeform"));
-          relModeForm &&
-            relModeForm.changeMode(IdSearchForm.method.VIEW);
-
+      relWith.form.addEventListener(ModeForm.MODE.VIEW, e => {
+        if (relFrom instanceof StorableForm) {
+          relFrom.changeMode(ModeForm.MODE.VIEW);
           relFrom.fetchById([e.detail.id]);
         }
       });
