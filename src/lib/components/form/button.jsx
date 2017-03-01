@@ -1,11 +1,13 @@
-import React  from "react";
+import React from "react";
 
 class Button extends React.Component {
 
   static defaultProps = {
+    text:         "",
+    width:        100,
     handlerClick: function() {}
   }
-
+  
   render() {
     const style = { width: this.props.width + "px" };
 
