@@ -50,7 +50,12 @@ class IdSearchForm extends Form {
   /**
    * Override function handlerSubmit
    */
-  handlerSubmit = this.handlerView
+  handlerSubmit(e) {
+    this.handlerView();
+    this.props.handlerSubmit(e);
+    e && e.preventDefault();
+    return false;
+  }
 
   render(children=this.props.children) {
     return super.render(
