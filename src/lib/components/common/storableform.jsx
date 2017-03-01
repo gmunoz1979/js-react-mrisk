@@ -12,7 +12,8 @@ class StorableForm extends FetchableForm {
   static MODE = ModeForm.MODE
 
   static defaultProps = {
-    mode: ModeForm.MODE.NEW
+    mode: ModeForm.MODE.NEW,
+    hasDelete: false
   }
 
   state = {
@@ -73,9 +74,32 @@ class StorableForm extends FetchableForm {
     Message.showMessage("Registro actualizado");
   }
 
+  handlerDelete() {
+    let fd = new FormData(this.form);
+
+    [].slice.call(this.form.querySelectorAll("input[type=checkbox]")).forEach(e => {
+      fd.set(e.name, fd.has(e.name));
+    });
+
+    const ids = [].slice.call(this.form.querySelectorAll("[data-is-id='1']")).map(i => i.name);
+
+    let ids_value = [];
+    for (let [k, v] of fd.entries()) {
+      ids.indexOf(k) !== -1 && ids_value.push(v);
+    }
+
+    /**
+     * Buscamos el array de ids
+     */
+    this.destroy(ids_value);
+  }
+
   // Eliminar
-  destroy(data) {
+  async destroy(ids_value) {
     const namespace = Util.findReact(this.form.querySelector(".namespace"));
+    const json = await namespace.destroy({ id: ids_value });
+
+    Message.showMessage("Registro eliminado");
   }
 
   render(children=this.props.children) {
@@ -88,6 +112,18 @@ class StorableForm extends FetchableForm {
             text         = "Guardar"
             width        = "auto"
             handlerClick = { this.handlerSave.bind(this) }
+            />
+        </Row>
+      );
+    }
+
+    if (this.state.mode === ModeForm.MODE.EDIT && this.props.hasDelete) {
+      children.push(
+        <Row>
+          <Button
+            text         = "Eliminar"
+            width        = "auto"
+            handlerClick = { this.handlerDelete.bind(this) }
             />
         </Row>
       );

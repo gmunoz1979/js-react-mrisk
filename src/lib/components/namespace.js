@@ -159,6 +159,27 @@ class Namespace extends React.Component {
     }
   }
 
+  async destroy(params) {
+    let url = this.getUrl("destroy") + "?options=" + JSON.stringify(params).replace(/(\"|\'|\s)/g, "");
+
+    try {
+      let response = await fetch(url, {
+        method:  "GET",
+        headers: this.getHeaders()
+      });
+
+      if (response.ok) {
+        let json = await response.json();
+        this.props.handlerSave(json);
+        return json;
+      }
+
+      this.handlerError(response);
+    } catch(err) {
+      throw err;
+    }
+  }
+
   async fetchById(filter) {
     let json = await this.getData({ id: filter }, "fetchById");
     return json;
