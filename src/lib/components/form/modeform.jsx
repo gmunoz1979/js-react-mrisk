@@ -59,7 +59,7 @@ function overrideFields(mode, children) {
       if (Util.isType(c.type, Field)) {
         props = Object.assign({}, props,
           {
-            readOnly: mode === MODE.VIEW
+            modeReadOnly: mode === MODE.VIEW
           });
 
         if (Util.isType(c.type, Combobox) && mode === MODE.VIEW) {
