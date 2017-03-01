@@ -1,4 +1,4 @@
-import React  from "react"; 
+import React  from "react";
 import Config from "./config";
 
 function findReact(dom) {
@@ -47,10 +47,17 @@ function isType(c, o) {
   return this.isType(c.__proto__, o);
 }
 
+let count = 0;
+
+function getID() {
+  return "mrisk-" + ++count;
+}
+
 export default {
   findReact: findReact,
   isArray:   isArray,
   isDate:    isDate,
   hasValue:  hasValue,
-  isType:    isType
+  isType:    isType,
+  getID:     getID
 }
