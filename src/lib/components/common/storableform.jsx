@@ -35,47 +35,63 @@ class StorableForm extends FetchableForm {
       fd.set(e.name, fd.has(e.name));
     });
 
-    // Comboboxs
-    [].slice.call(this.form.querySelectorAll("select")).forEach(e => {
-      fd.append(e.component.props.idValue, fd.get(e.name));
-      fd.delete(e.name);
-    });
-
     let data = {};
     for (let [k, v] of fd.entries()) {
       data[k] = v;
     }
 
-    const namespace = Util.findReact(this.form.querySelector(".namespace"));
+    /**
+     * Buscamos el array de ids
+     */
+    const ids = [].slice.call(this.form.querySelectorAll("[data-is-id='1']")).map(i => i.name);
 
-  //   if (this.state.mode === Form.ModeType.NEW) {
-  //     namespace.create(data).then(json => {
-  //       Message.showMessage("Registro creado");
-  //     });
-  //   }
-  //
-  //   if (this.state.mode === Form.ModeType.EDIT) {
-  //     let id = data[this.props.fieldKey];
-  //     delete data[this.props.fieldKey];
-  //
-  //     namespace.patch({ id: [id] }, data).then(json => {
-  //       Message.showMessage("Registro actualizado");
-  //     });
-  //   }
+    this.state.mode === ModeForm.MODE.NEW &&  this.create(data,ids);
+    this.state.mode === ModeForm.MODE.EDIT && this.patch(data, ids)
+  }
+
+  // Nuevo
+  async create(data, ids) {
+    const namespace = Util.findReact(this.form.querySelector(".namespace"));
+    const json = await namespace.create(data);
+
+    Message.showMessage("Registro creado");
+  }
+
+  // Actualizar
+  async patch(data, ids) {
+    let ids_value = [];
+    for (let [k,v] of Object.entries(data)) {
+      if (ids.indexOf(k) !== -1) {
+        ids_value.push(v);
+        delete data[k];
+      }
+    }
+
+    const namespace = Util.findReact(this.form.querySelector(".namespace"));
+    const json = await namespace.patch({ id: ids_value }, data)
+
+    Message.showMessage("Registro actualizado");
+  }
+
+  // Eliminar
+  destroy(data) {
+    const namespace = Util.findReact(this.form.querySelector(".namespace"));
   }
 
   render(children=this.props.children) {
     children = React.Children.toArray(ModeForm.overrideFields(this.state.mode, children));
 
-    children.push(
-      <Row>
-        <Button
-          text         = "Guardar"
-          width        = "auto"
-          handlerClick = { this.handlerSave.bind(this) }
-          />
-      </Row>
-    );
+    if (this.state.mode !== ModeForm.MODE.VIEW) {
+      children.push(
+        <Row>
+          <Button
+            text         = "Guardar"
+            width        = "auto"
+            handlerClick = { this.handlerSave.bind(this) }
+            />
+        </Row>
+      );
+    }
 
     return super.render(children);
   }
