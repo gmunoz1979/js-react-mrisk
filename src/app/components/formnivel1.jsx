@@ -18,7 +18,8 @@ class FormNivel1 extends React.Component {
     return <StorableForm
       name      = "form"
       namespace = "Nivel1"
-      mode      = {StorableForm.MODE.VIEW} >
+      mode      = {StorableForm.MODE.VIEW}
+      hasDelete = {true} >
         <Relation with = {this.props.search} />
         <Row>
           <TextField

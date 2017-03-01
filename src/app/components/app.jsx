@@ -29,7 +29,7 @@ class App extends React.Component {
           </Panel>
           <Panel
             width  = "500"
-            height = "275">
+            height = "305">
             <FormNivel1 search="search1" />
           </Panel>
         </div>
@@ -43,7 +43,7 @@ class App extends React.Component {
           </Panel>
           <Panel
             width  = "950"
-            height = "275">
+            height = "305">
             <FormOtro1 search="search2" />
           </Panel>
         </div>
